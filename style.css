@@ -230,6 +230,29 @@ h2 span {
   line-height: 1.8;
 }
 
+.card-toc {
+  list-style: none;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--line);
+}
+
+.card-toc li + li {
+  margin-top: 8px;
+}
+
+.card-toc a {
+  font-size: 0.85rem;
+  color: var(--forest);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.card-toc a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
 /* Sub-page hero (breadcrumb) */
 .hero-sub .hero-inner {
   padding: 90px 24px 70px;
@@ -275,6 +298,42 @@ h2 span {
 /* Post (article detail) */
 .post-section {
   background: var(--paper);
+}
+
+.post-toc {
+  background: var(--sand);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 28px 32px;
+  margin-bottom: 64px;
+}
+
+.post-toc-title {
+  font-size: 0.8rem;
+  color: var(--forest-mid);
+  letter-spacing: 0.12em;
+  margin-bottom: 14px;
+}
+
+.post-toc ul {
+  list-style: none;
+}
+
+.post-toc li + li {
+  margin-top: 10px;
+}
+
+.post-toc a {
+  font-size: 0.95rem;
+  color: var(--forest-deep);
+  border-bottom: 1px solid var(--forest-soft);
+  padding-bottom: 1px;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.post-toc a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
 }
 
 .post {
