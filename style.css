@@ -43,7 +43,7 @@ a {
 }
 
 .header-inner {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 18px 24px;
   display: flex;
@@ -77,7 +77,7 @@ a {
 
 /* Hero */
 .hero {
-  max-width: 900px;
+  max-width: 1200px;
   width: calc(100% - 48px);
   margin: 0 auto;
   background:
@@ -109,7 +109,7 @@ a {
 
 /* Section shared */
 .section-inner {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 90px 24px;
 }
@@ -188,7 +188,7 @@ h2 span {
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 28px;
 }
 
@@ -298,6 +298,11 @@ h2 span {
 /* Post (article detail) */
 .post-section {
   background: var(--paper);
+}
+
+/* 記事本文は読みやすい行の長さに保つ */
+.post-section .section-inner {
+  max-width: 900px;
 }
 
 .post-toc {
