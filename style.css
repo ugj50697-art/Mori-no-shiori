@@ -119,6 +119,31 @@ a {
   font-size: 0.85rem;
 }
 
+.hero-message {
+  max-width: 640px;
+  margin: 44px auto 0;
+  padding: 28px 28px 24px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--accent);
+  border-radius: 4px;
+}
+
+.hero-message-title {
+  font-family: "Shippori Mincho", "Noto Serif JP", serif;
+  font-size: clamp(1.2rem, 3vw, 1.45rem);
+  font-weight: 700;
+  color: var(--forest-deep);
+  letter-spacing: 0.1em;
+  margin-bottom: 14px;
+}
+
+.hero-message p:not(.hero-message-title) {
+  color: var(--ink);
+  font-size: 0.95rem;
+  line-height: 1.9;
+}
+
 /* Section shared */
 .section-inner {
   max-width: 1200px;
