@@ -101,10 +101,22 @@ a {
   margin-bottom: 20px;
 }
 
+.hero-catch {
+  font-family: "Shippori Mincho", "Noto Serif JP", serif;
+  font-size: clamp(1.15rem, 2.6vw, 1.5rem);
+  color: var(--forest);
+  letter-spacing: 0.15em;
+  margin-bottom: 14px;
+}
+
 .hero-lead {
   color: var(--ink-soft);
   font-size: 1rem;
   letter-spacing: 0.05em;
+}
+
+.hero .hero-catch + .hero-lead {
+  font-size: 0.85rem;
 }
 
 /* Section shared */
@@ -132,10 +144,93 @@ h2 span {
   text-transform: uppercase;
 }
 
+/* Featured（今日の一編） */
+.featured .section-inner {
+  padding-bottom: 0;
+}
+
+.featured-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  background: var(--sand);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.featured-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(36, 56, 44, 0.08);
+}
+
+.featured-image img {
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  object-fit: cover;
+  display: block;
+}
+
+.featured-text {
+  padding: 40px 40px 36px;
+  display: flex;
+  flex-direction: column;
+}
+
+.featured-text h3 {
+  font-size: 1.35rem;
+  color: var(--forest-deep);
+  font-weight: 700;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.featured-excerpt {
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  margin-bottom: 20px;
+}
+
+.featured-note {
+  padding: 16px 20px;
+  background: var(--paper);
+  border-left: 4px solid var(--accent);
+  border-radius: 4px;
+  margin-bottom: 24px;
+}
+
+.featured-note p:not(.shiori-note-title) {
+  font-size: 0.95rem;
+  color: var(--forest-deep);
+}
+
+.featured-more {
+  margin-top: auto;
+  font-size: 0.9rem;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 760px) {
+  .featured-card {
+    grid-template-columns: 1fr;
+  }
+
+  .featured-image img {
+    min-height: 0;
+    aspect-ratio: 16 / 10;
+  }
+
+  .featured-text {
+    padding: 28px 24px;
+  }
+}
+
 /* About */
 .about {
   background: var(--paper);
-  border-bottom: 1px solid var(--line);
+  border-top: 1px solid var(--line);
 }
 
 .about-card {
@@ -208,6 +303,17 @@ h2 span {
 .card-icon {
   font-size: 1.6rem;
   margin-bottom: 18px;
+}
+
+/* カード上部のイラスト（カードの端まで広げる） */
+.card-thumb {
+  display: block;
+  width: calc(100% + 56px);
+  margin: -36px -28px 22px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 4px 4px 0 0;
+  border-bottom: 1px solid var(--line);
 }
 
 .card-category {

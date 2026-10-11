@@ -12,8 +12,8 @@
   <div class="header-inner">
     <p class="logo">森のしおり</p>
     <nav>
-      <a href="#about">プロフィール</a>
       <a href="#articles">記事</a>
+      <a href="#about">プロフィール</a>
     </nav>
   </div>
 </header>
@@ -21,11 +21,106 @@
 <section class="hero">
   <div class="hero-inner">
     <h1>森のしおり</h1>
+    <p class="hero-catch">読んで、歩いて、考えたこと。</p>
     <p class="hero-lead">旅と、本と、AIとの日々を、静かに綴る場所。</p>
   </div>
 </section>
 
 <main>
+
+  <section class="featured">
+    <div class="section-inner">
+      <h2><span>Pick up</span>今日の一編</h2>
+      <a class="featured-card" href="challenge.html#everest">
+        <div class="featured-image">
+          <img src="images/everest-illust.png" alt="エベレストの頂を目指して登る登山者のイメージイラスト">
+        </div>
+        <div class="featured-text">
+          <p class="card-category">🏔️ 挑戦・チャレンジ</p>
+          <h3>「いつか」ではなく「今」―18歳、エベレストへの挑戦</h3>
+          <p class="featured-excerpt">東京の高校3年生が、エベレストの日本人最年少登頂をめざしています。「『いつか』では一生行かない」と期限を決め、遠征費もアルバイトや募金で自分の力で集めています。</p>
+          <div class="featured-note">
+            <p class="shiori-note-title">🌿 しおりのひとこと</p>
+            <p>あなたが「いつか」と言ったまま、しまってあることは何ですか？</p>
+          </div>
+          <p class="featured-more">続きを読む →</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section id="articles" class="articles">
+    <div class="section-inner">
+      <h2><span>Articles</span>記事</h2>
+      <div class="card-grid">
+
+        <div class="card">
+          <img class="card-thumb" src="images/shinjuku-gyoen-autumn.jpg" alt="" loading="lazy">
+          <p class="card-category">✈️ 旅行</p>
+          <h3>函館への旅／神戸布引ハーブ園</h3>
+          <p class="card-desc">訪れた土地の記憶や、旅のささやかな発見を綴っています。</p>
+          <ul class="card-toc">
+            <li><a href="travel.html#hakodate-kobe">01　函館への旅／神戸布引ハーブ園</a></li>
+            <li><a href="travel.html#kasai">02　葛西臨海公園で秋を探す</a></li>
+            <li><a href="travel.html#gyoen">03　新宿御苑で過ごした秋の一日</a></li>
+            <li><a href="travel.html#small-reactor">04　小型原子炉</a></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <img class="card-thumb" src="images/jean-valjean-bread.jpg" alt="" loading="lazy">
+          <p class="card-category">📚 本・読書</p>
+          <h3>ミリエル司教の思いやりとユゴーの願い</h3>
+          <p class="card-desc">読んだ本の感想や、心に残った一節を綴っています。</p>
+          <ul class="card-toc">
+            <li><a href="books.html#miriel">01　ミリエル司教の思いやりとユゴーの願い</a></li>
+            <li><a href="books.html#passport">02　黄色いパスポートが奪う再出発</a></li>
+            <li><a href="books.html#bread">03　ジャン・バルジャンと一つのパン</a></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <img class="card-thumb" src="images/ai-school-think.jpg" alt="" loading="lazy">
+          <p class="card-category">🤖 AIと私</p>
+          <h3>AIの自己改善と人間による制御</h3>
+          <p class="card-desc">AIとの対話から生まれた気づきや、日々の活用法を綴っています。</p>
+          <ul class="card-toc">
+            <li><a href="ai.html#self-improve">01　AIの自己改善と人間による制御</a></li>
+            <li><a href="ai.html#agent-error">02　AIが勝手に画像をネットに公開!?</a></li>
+            <li><a href="ai.html#think-power">03　AI時代に自分で考える力を育てる</a></li>
+            <li><a href="ai.html#ai-company-future">04　AI企業の成長と人類の未来</a></li>
+            <li><a href="ai.html#ai-school">05　学校でのAI活用と考える力</a></li>
+          </ul>
+        </div>
+
+        <a class="card card-link" href="kichijoji.html">
+          <img class="card-thumb" src="images/kichijoji-illustration.png" alt="" loading="lazy">
+          <p class="card-category">🏮 英語で読む、日本の街と文化</p>
+          <h3>吉祥寺・町の歴史</h3>
+          <p class="card-desc">英字新聞の記事から見えてきた、吉祥寺という街の成り立ちと文化を綴っています。</p>
+        </a>
+
+        <a class="card card-link" href="society.html">
+          <img class="card-thumb" src="images/nepal-flood.jpg" alt="" loading="lazy">
+          <p class="card-category">🌏 英語を通して覗いた日本の社会・海外の現実</p>
+          <h3>アジアの自然災害と金融危機</h3>
+          <p class="card-desc">英字新聞や海外のニュースから見えてくる、日本と世界の姿を綴っています。</p>
+        </a>
+
+        <div class="card">
+          <img class="card-thumb" src="images/kyudo-101.png" alt="" loading="lazy">
+          <p class="card-category">🏔️ 挑戦・チャレンジ</p>
+          <h3>「いつか」ではなく「今」―18歳、エベレストへの挑戦</h3>
+          <p class="card-desc">目標に向かって一歩を踏み出す人たちの姿を綴っています。</p>
+          <ul class="card-toc">
+            <li><a href="challenge.html#everest">01　「いつか」ではなく「今」―18歳、エベレストへの挑戦</a></li>
+            <li><a href="challenge.html#kyudo">02　101歳の弓道指導者</a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
 
   <section id="about" class="about">
     <div class="section-inner">
@@ -45,79 +140,6 @@
             私を語る上でのキーワード：英語・英語の新聞・文学・映画・世の中で起こっていること・世の中の変化・科学技術・AIとの壁打ち・旅行・卓球・性善説と性悪説のどっちをとる？
           </p>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="articles" class="articles">
-    <div class="section-inner">
-      <h2><span>Articles</span>記事</h2>
-      <div class="card-grid">
-
-        <div class="card">
-          <div class="card-icon" aria-hidden="true">✈️</div>
-          <p class="card-category">旅行</p>
-          <h3>函館への旅／神戸布引ハーブ園</h3>
-          <p class="card-desc">訪れた土地の記憶や、旅のささやかな発見を綴っています。</p>
-          <ul class="card-toc">
-            <li><a href="travel.html#hakodate-kobe">01　函館への旅／神戸布引ハーブ園</a></li>
-            <li><a href="travel.html#kasai">02　葛西臨海公園で秋を探す</a></li>
-            <li><a href="travel.html#gyoen">03　新宿御苑で過ごした秋の一日</a></li>
-            <li><a href="travel.html#small-reactor">04　小型原子炉</a></li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <div class="card-icon" aria-hidden="true">📚</div>
-          <p class="card-category">本・読書</p>
-          <h3>ミリエル司教の思いやりとユゴーの願い</h3>
-          <p class="card-desc">読んだ本の感想や、心に残った一節を綴っています。</p>
-          <ul class="card-toc">
-            <li><a href="books.html#miriel">01　ミリエル司教の思いやりとユゴーの願い</a></li>
-            <li><a href="books.html#passport">02　黄色いパスポートが奪う再出発</a></li>
-            <li><a href="books.html#bread">03　ジャン・バルジャンと一つのパン</a></li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <div class="card-icon" aria-hidden="true">🤖</div>
-          <p class="card-category">AIと私</p>
-          <h3>AIの自己改善と人間による制御</h3>
-          <p class="card-desc">AIとの対話から生まれた気づきや、日々の活用法を綴っています。</p>
-          <ul class="card-toc">
-            <li><a href="ai.html#self-improve">01　AIの自己改善と人間による制御</a></li>
-            <li><a href="ai.html#agent-error">02　AIが勝手に画像をネットに公開!?</a></li>
-            <li><a href="ai.html#think-power">03　AI時代に自分で考える力を育てる</a></li>
-            <li><a href="ai.html#ai-company-future">04　AI企業の成長と人類の未来</a></li>
-            <li><a href="ai.html#ai-school">05　学校でのAI活用と考える力</a></li>
-          </ul>
-        </div>
-
-        <a class="card card-link" href="kichijoji.html">
-          <div class="card-icon" aria-hidden="true">🏮</div>
-          <p class="card-category">英語で読む、日本の街と文化</p>
-          <h3>吉祥寺・町の歴史</h3>
-          <p class="card-desc">英字新聞の記事から見えてきた、吉祥寺という街の成り立ちと文化を綴っています。</p>
-        </a>
-
-        <a class="card card-link" href="society.html">
-          <div class="card-icon" aria-hidden="true">🌏</div>
-          <p class="card-category">英語を通して覗いた日本の社会・海外の現実</p>
-          <h3>アジアの自然災害と金融危機</h3>
-          <p class="card-desc">英字新聞や海外のニュースから見えてくる、日本と世界の姿を綴っています。</p>
-        </a>
-
-        <div class="card">
-          <div class="card-icon" aria-hidden="true">🏔️</div>
-          <p class="card-category">挑戦・チャレンジ</p>
-          <h3>「いつか」ではなく「今」―18歳、エベレストへの挑戦</h3>
-          <p class="card-desc">目標に向かって一歩を踏み出す人たちの姿を綴っています。</p>
-          <ul class="card-toc">
-            <li><a href="challenge.html#everest">01　「いつか」ではなく「今」―18歳、エベレストへの挑戦</a></li>
-            <li><a href="challenge.html#kyudo">02　101歳の弓道指導者</a></li>
-          </ul>
-        </div>
-
       </div>
     </div>
   </section>
