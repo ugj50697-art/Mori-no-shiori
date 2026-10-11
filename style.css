@@ -468,6 +468,30 @@ h2 span {
   color: var(--forest-deep);
 }
 
+/* しおりのひとこと（記事末尾の感想・問いかけ） */
+.shiori-note {
+  margin-top: 36px;
+  padding: 24px 28px;
+  background: var(--sand);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  border-radius: 4px;
+}
+
+.shiori-note-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.12em;
+  margin-bottom: 10px;
+}
+
+.shiori-note p:not(.shiori-note-title) {
+  font-size: 0.95rem;
+  color: var(--forest-deep);
+  line-height: 1.9;
+}
+
 /* Footer */
 .site-footer {
   text-align: center;
