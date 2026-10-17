@@ -1,16 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;500&display=swap');
 
+/* 色：紺（ヨーロッパの夜空・インク）＋ワインレッド＋金（古い写本の飾り） */
 :root {
-  --forest-deep: #24382c;
-  --forest: #3d5c46;
-  --forest-mid: #5c7a63;
-  --forest-soft: #8ba38f;
-  --sand: #f5f2ea;
-  --paper: #fbfaf6;
-  --ink: #2c2c28;
-  --ink-soft: #6b6a63;
-  --line: #dedad0;
-  --accent: #b3562c;
+  --navy-deep: #1c2a44;
+  --navy: #2f4570;
+  --navy-mid: #546a93;
+  --navy-soft: #93a2bf;
+  --parchment: #f4eee2;
+  --paper: #fcfaf5;
+  --ink: #2a2a30;
+  --ink-soft: #66656c;
+  --line: #ddd5c4;
+  --accent: #8e2f3c;
+  --gold: #b08d3c;
 }
 
 * {
@@ -37,7 +39,7 @@ a {
   position: sticky;
   top: 0;
   z-index: 10;
-  background: rgba(251, 250, 246, 0.9);
+  background: rgba(252, 250, 245, 0.92);
   backdrop-filter: blur(6px);
   border-bottom: 1px solid var(--line);
 }
@@ -49,30 +51,32 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
 }
 
 .logo {
   font-size: 1.1rem;
   font-weight: 700;
-  color: var(--forest-deep);
+  color: var(--navy-deep);
   letter-spacing: 0.08em;
 }
 
 .site-header nav {
   display: flex;
-  gap: 28px;
+  flex-wrap: wrap;
+  gap: 8px 24px;
 }
 
 .site-header nav a {
   font-size: 0.9rem;
-  color: var(--forest);
+  color: var(--navy);
   border-bottom: 1px solid transparent;
   padding-bottom: 2px;
   transition: border-color 0.2s;
 }
 
 .site-header nav a:hover {
-  border-color: var(--forest-mid);
+  border-color: var(--navy-mid);
 }
 
 /* Hero */
@@ -81,9 +85,9 @@ a {
   width: calc(100% - 48px);
   margin: 0 auto;
   background:
-    radial-gradient(circle at 20% 20%, rgba(139, 163, 143, 0.25), transparent 55%),
-    radial-gradient(circle at 80% 60%, rgba(61, 92, 70, 0.18), transparent 55%),
-    var(--sand);
+    radial-gradient(circle at 18% 22%, rgba(176, 141, 60, 0.18), transparent 55%),
+    radial-gradient(circle at 82% 65%, rgba(47, 69, 112, 0.2), transparent 55%),
+    var(--parchment);
   border: 1px solid var(--line);
   border-radius: 4px;
 }
@@ -94,8 +98,8 @@ a {
 }
 
 .hero h1 {
-  font-size: clamp(2.2rem, 5vw, 3rem);
-  color: var(--forest-deep);
+  font-size: clamp(2.1rem, 5vw, 3rem);
+  color: var(--navy-deep);
   font-weight: 700;
   letter-spacing: 0.12em;
   margin-bottom: 20px;
@@ -104,19 +108,15 @@ a {
 .hero-catch {
   font-family: "Shippori Mincho", "Noto Serif JP", serif;
   font-size: clamp(1.15rem, 2.6vw, 1.5rem);
-  color: var(--forest);
+  color: var(--navy);
   letter-spacing: 0.15em;
   margin-bottom: 14px;
 }
 
 .hero-lead {
   color: var(--ink-soft);
-  font-size: 1rem;
+  font-size: 0.9rem;
   letter-spacing: 0.05em;
-}
-
-.hero .hero-catch + .hero-lead {
-  font-size: 0.85rem;
 }
 
 .hero-message {
@@ -125,23 +125,26 @@ a {
   padding: 28px 28px 24px;
   background: var(--paper);
   border: 1px solid var(--line);
-  border-top: 4px solid var(--accent);
+  border-top: 4px solid var(--gold);
   border-radius: 4px;
 }
 
 .hero-message-title {
   font-family: "Shippori Mincho", "Noto Serif JP", serif;
-  font-size: clamp(1.2rem, 3vw, 1.45rem);
+  font-size: clamp(1.15rem, 3vw, 1.4rem);
   font-weight: 700;
-  color: var(--forest-deep);
+  color: var(--navy-deep);
   letter-spacing: 0.1em;
   margin-bottom: 14px;
 }
 
 .hero-message p:not(.hero-message-title) {
-  color: var(--ink);
   font-size: 0.95rem;
-  line-height: 1.9;
+}
+
+.book-title {
+  font-family: 'Georgia', serif;
+  font-style: italic;
 }
 
 /* Section shared */
@@ -156,7 +159,7 @@ h2 {
   align-items: baseline;
   gap: 12px;
   font-size: 1.5rem;
-  color: var(--forest-deep);
+  color: var(--navy-deep);
   margin-bottom: 48px;
   letter-spacing: 0.08em;
 }
@@ -165,226 +168,192 @@ h2 span {
   font-family: 'Georgia', serif;
   font-size: 0.75rem;
   letter-spacing: 0.15em;
-  color: var(--forest-soft);
+  color: var(--gold);
   text-transform: uppercase;
 }
 
-/* Featured（今日の一編） */
-.featured .section-inner {
+/* 時代ごとの目次（年表風） */
+.timeline {
+  list-style: none;
+  border-left: 2px solid var(--line);
+  margin-left: 8px;
+}
+
+.era {
+  position: relative;
+  padding: 0 0 48px 36px;
+}
+
+.era:last-child {
   padding-bottom: 0;
 }
 
-.featured-card {
-  display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-  background: var(--sand);
-  border: 1px solid var(--line);
-  border-radius: 4px;
-  overflow: hidden;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.featured-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(36, 56, 44, 0.08);
-}
-
-.featured-image img {
-  width: 100%;
-  height: 100%;
-  min-height: 280px;
-  object-fit: cover;
-  display: block;
-}
-
-.featured-text {
-  padding: 40px 40px 36px;
-  display: flex;
-  flex-direction: column;
-}
-
-.featured-text h3 {
-  font-size: 1.35rem;
-  color: var(--forest-deep);
-  font-weight: 700;
-  line-height: 1.6;
-  margin-bottom: 16px;
-}
-
-.featured-excerpt {
-  font-size: 0.92rem;
-  color: var(--ink-soft);
-  margin-bottom: 20px;
-}
-
-.featured-note {
-  padding: 16px 20px;
-  background: var(--paper);
-  border-left: 4px solid var(--accent);
-  border-radius: 4px;
-  margin-bottom: 24px;
-}
-
-.featured-note p:not(.shiori-note-title) {
-  font-size: 0.95rem;
-  color: var(--forest-deep);
-}
-
-.featured-more {
-  margin-top: auto;
-  font-size: 0.9rem;
-  color: var(--accent);
-  letter-spacing: 0.05em;
-}
-
-@media (max-width: 760px) {
-  .featured-card {
-    grid-template-columns: 1fr;
-  }
-
-  .featured-image img {
-    min-height: 0;
-    aspect-ratio: 16 / 10;
-  }
-
-  .featured-text {
-    padding: 28px 24px;
-  }
-}
-
-/* About */
-.about {
-  background: var(--paper);
-  border-top: 1px solid var(--line);
-}
-
-.about-card {
-  display: flex;
-  align-items: center;
-  gap: 36px;
-  background: var(--sand);
-  border: 1px solid var(--line);
-  border-radius: 4px;
-  padding: 44px;
-}
-
-.avatar {
-  flex-shrink: 0;
-  width: 84px;
-  height: 84px;
+.era::before {
+  content: "";
+  position: absolute;
+  left: -9px;
+  top: 8px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  background: var(--forest);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-}
-
-.nickname {
-  font-weight: 700;
-  color: var(--forest-deep);
-  margin-bottom: 12px;
-  letter-spacing: 0.05em;
-}
-
-.bio {
-  color: var(--ink-soft);
-  font-size: 0.95rem;
-}
-
-.bio-keywords {
-  margin-top: 18px;
-  padding-top: 18px;
-  border-top: 1px dashed var(--line);
-  color: var(--forest-mid);
-  font-size: 0.85rem;
-  line-height: 1.8;
-}
-
-/* Articles */
-.articles {
   background: var(--paper);
+  border: 3px solid var(--gold);
 }
 
-.card-grid {
+.era-label {
+  font-family: 'Georgia', serif;
+  font-size: 0.75rem;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.era h3 {
+  font-size: 1.2rem;
+  color: var(--navy-deep);
+  margin-bottom: 14px;
+  letter-spacing: 0.06em;
+}
+
+.chapter-list {
+  list-style: none;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 28px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
 }
 
-.card {
-  background: var(--sand);
+.chapter-list > li > a,
+.chapter-list .ready,
+.chapter-list .soon {
+  display: block;
+  height: 100%;
+  background: var(--parchment);
   border: 1px solid var(--line);
   border-radius: 4px;
-  padding: 36px 28px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  padding: 18px 22px;
+  font-size: 0.95rem;
+  color: var(--navy-deep);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
 }
 
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(36, 56, 44, 0.08);
+.chapter-list > li > a:hover,
+.chapter-list .ready:hover {
+  transform: translateY(-3px);
+  border-color: var(--gold);
+  box-shadow: 0 10px 20px rgba(28, 42, 68, 0.08);
 }
 
-.card-icon {
-  font-size: 1.6rem;
-  margin-bottom: 18px;
+/* 公開済みの章：金の線で目立たせ、中の要約へのリンクも並べる */
+.chapter-list .ready {
+  border-top: 3px solid var(--gold);
 }
 
-/* カード上部のイラスト（カードの端まで広げる） */
-.card-thumb {
+.ready-title {
   display: block;
-  width: calc(100% + 56px);
-  margin: -36px -28px 22px;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  border-radius: 4px 4px 0 0;
-  border-bottom: 1px solid var(--line);
+  font-weight: 700;
+  color: var(--navy-deep);
 }
 
-.card-category {
-  font-size: 0.75rem;
-  color: var(--forest-mid);
-  letter-spacing: 0.1em;
-  margin-bottom: 10px;
-}
-
-.card h3 {
-  font-size: 1.05rem;
-  color: var(--forest-deep);
-  margin-bottom: 12px;
-  font-weight: 500;
-}
-
-.card-desc {
-  font-size: 0.85rem;
-  color: var(--ink-soft);
-  line-height: 1.8;
-}
-
-.card-toc {
+.chapter-sub {
   list-style: none;
-  margin-top: 16px;
-  padding-top: 16px;
+  margin-top: 10px;
+  padding-top: 10px;
   border-top: 1px dashed var(--line);
 }
 
-.card-toc li + li {
-  margin-top: 8px;
+.chapter-sub li + li {
+  margin-top: 4px;
 }
 
-.card-toc a {
+.chapter-sub a {
   font-size: 0.85rem;
-  color: var(--forest);
+  color: var(--navy);
   border-bottom: 1px solid transparent;
-  transition: border-color 0.2s, color 0.2s;
+  transition: color 0.2s, border-color 0.2s;
 }
 
-.card-toc a:hover {
+.chapter-sub a:hover {
   color: var(--accent);
   border-color: var(--accent);
 }
 
-/* Sub-page hero (breadcrumb) */
+.chapter-list .tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 0 8px;
+  font-size: 0.7rem;
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  vertical-align: middle;
+}
+
+.toc-note {
+  margin-top: 32px;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.chapter-list .num {
+  display: block;
+  font-family: 'Georgia', serif;
+  font-size: 0.75rem;
+  color: var(--accent);
+  letter-spacing: 0.12em;
+}
+
+.chapter-list .soon {
+  color: var(--ink-soft);
+  background: transparent;
+  border-style: dashed;
+}
+
+/* 姉妹サイト（森のしおり）への案内 */
+.sister {
+  border-top: 1px solid var(--line);
+}
+
+.sister-card {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  background: var(--parchment);
+  border: 1px solid var(--line);
+  border-left: 4px solid #3d5c46;
+  border-radius: 4px;
+  padding: 32px 36px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.sister-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(28, 42, 68, 0.08);
+}
+
+.sister-icon {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #3d5c46;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+}
+
+.sister-name {
+  font-weight: 700;
+  color: #24382c;
+  margin-bottom: 4px;
+}
+
+.sister-desc {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+/* Sub-page hero (章のページ) */
 .hero-sub .hero-inner {
   padding: 90px 24px 70px;
   text-align: left;
@@ -393,51 +362,54 @@ h2 span {
 .breadcrumb {
   font-size: 0.8rem;
   color: var(--ink-soft);
-  letter-spacing: 0.05em;
   margin-bottom: 18px;
 }
 
 .breadcrumb a {
-  color: var(--forest);
-  border-bottom: 1px solid var(--forest-soft);
+  color: var(--navy);
+  border-bottom: 1px solid var(--navy-soft);
 }
 
 .hero-sub h1 {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  text-align: left;
   font-size: clamp(1.4rem, 3.2vw, 1.9rem);
   color: var(--paper);
-  background: var(--forest);
+  background: var(--navy);
   padding: 18px 28px;
   border-radius: 4px;
   letter-spacing: 0.1em;
   margin-bottom: 20px;
 }
 
-.hero-sub .hero-lead {
-  text-align: left;
-}
-
-/* Article card as link */
-.card-link {
-  display: block;
-  color: inherit;
-}
-
-/* Post (article detail) */
-.post-section {
-  background: var(--paper);
-}
-
-/* 記事本文は読みやすい行の長さに保つ */
+/* 章の本文 */
 .post-section .section-inner {
   max-width: 900px;
 }
 
+.post-body p {
+  margin-bottom: 22px;
+  font-size: 0.95rem;
+}
+
+.post-body h3 {
+  font-size: 1.15rem;
+  color: var(--navy-deep);
+  margin: 40px 0 16px;
+  padding-left: 12px;
+  border-left: 4px solid var(--gold);
+}
+
+.post-body strong {
+  color: var(--navy-deep);
+}
+
+.post-body .accent {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* 章内の目次 */
 .post-toc {
-  background: var(--sand);
+  background: var(--parchment);
   border: 1px solid var(--line);
   border-radius: 4px;
   padding: 28px 32px;
@@ -446,7 +418,7 @@ h2 span {
 
 .post-toc-title {
   font-size: 0.8rem;
-  color: var(--forest-mid);
+  color: var(--navy-mid);
   letter-spacing: 0.12em;
   margin-bottom: 14px;
 }
@@ -461,9 +433,8 @@ h2 span {
 
 .post-toc a {
   font-size: 0.95rem;
-  color: var(--forest-deep);
-  border-bottom: 1px solid var(--forest-soft);
-  padding-bottom: 1px;
+  color: var(--navy-deep);
+  border-bottom: 1px solid var(--navy-soft);
   transition: color 0.2s, border-color 0.2s;
 }
 
@@ -472,37 +443,25 @@ h2 span {
   border-color: var(--accent);
 }
 
+/* 1つの要約（ページ範囲ごと） */
 .post {
   margin-bottom: 80px;
   padding-bottom: 80px;
   border-bottom: 1px solid var(--line);
-}
-
-.post:last-child {
-  margin-bottom: 0;
-  padding-bottom: 0;
-  border-bottom: none;
+  scroll-margin-top: 80px;
 }
 
 .post-category {
   font-size: 0.75rem;
-  color: var(--forest-mid);
-  letter-spacing: 0.1em;
-  margin-bottom: 10px;
+  color: var(--gold);
+  letter-spacing: 0.12em;
+  margin-bottom: 8px;
 }
 
 .post-header h2 {
   display: block;
   font-size: 1.4rem;
-  color: var(--forest-deep);
-  letter-spacing: 0.06em;
-  margin-bottom: 8px;
-}
-
-.post-date {
-  font-size: 0.85rem;
-  color: var(--ink-soft);
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 }
 
 .post-photo {
@@ -517,99 +476,157 @@ h2 span {
 
 .post-photo figcaption {
   margin-top: 10px;
-  font-size: 0.8rem;
-  color: var(--ink-soft);
+  font-size: 0.85rem;
+  color: var(--navy);
   text-align: center;
 }
 
-.post-photo-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
+/* 筆者の主張のポイント */
+.point {
+  background: var(--parchment);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--gold);
+  border-radius: 4px;
+  padding: 22px 26px;
   margin-bottom: 32px;
 }
 
-.post-photo-grid .post-photo {
-  margin-bottom: 0;
-}
-
-.post-body p {
-  margin-bottom: 22px;
-  font-size: 0.95rem;
-  color: var(--ink);
-}
-
-.post-body strong {
-  color: var(--forest-deep);
+.point-title {
+  font-size: 0.8rem;
   font-weight: 700;
+  color: var(--navy);
+  letter-spacing: 0.12em;
+  margin-bottom: 8px;
 }
 
-.post-body .accent {
+.point p:not(.point-title),
+.point li {
+  font-size: 0.95rem;
+  color: var(--navy-deep);
+  font-weight: 500;
+}
+
+.point ul {
+  padding-left: 1.2em;
+}
+
+.point li + li {
+  margin-top: 6px;
+}
+
+/* 年表 */
+.table-title {
+  font-size: 1.05rem;
+  color: var(--navy-deep);
+  margin: 40px 0 16px;
+  padding-left: 12px;
+  border-left: 4px solid var(--gold);
+}
+
+.chronology {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.chronology th {
+  background: var(--navy);
+  color: var(--paper);
+  font-weight: 500;
+  text-align: left;
+  padding: 10px 16px;
+}
+
+.chronology td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+.chronology td:first-child {
+  white-space: nowrap;
   color: var(--accent);
   font-weight: 600;
+  width: 34%;
 }
 
-.post-body .closing {
-  font-weight: 600;
-  color: var(--forest-deep);
+.chronology tbody tr:nth-child(even) {
+  background: var(--parchment);
 }
 
-.post-body blockquote {
-  margin: 22px 0;
-  padding: 20px 24px;
-  background: var(--sand);
-  border-left: 3px solid var(--forest-soft);
-  border-radius: 4px;
-}
-
-.post-body blockquote p {
+/* 地図とその見どころ */
+.map-lead {
+  font-size: 0.92rem;
   color: var(--ink-soft);
-  font-size: 0.9rem;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
-.post-body blockquote p:last-child {
+.post-photo.map img {
+  border: 1px solid var(--line);
+}
+
+.post-photo.map figcaption {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  text-align: left;
+  line-height: 1.7;
+}
+
+.map-points {
+  background: var(--parchment);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 20px 26px;
+}
+
+.map-points dt {
+  font-weight: 700;
+  color: var(--navy-deep);
+  font-size: 0.95rem;
+}
+
+.map-points dt::before {
+  content: "◆ ";
+  color: var(--gold);
+}
+
+.map-points dd {
+  font-size: 0.9rem;
+  margin: 2px 0 14px 1.3em;
+}
+
+.map-points dd:last-child {
   margin-bottom: 0;
 }
 
-.post-body .source-note {
-  margin-top: -8px;
+.source-note {
+  margin-top: 10px;
   font-size: 0.8rem;
   color: var(--ink-soft);
   text-align: right;
 }
 
-.post-body blockquote ul {
-  margin: 14px 0 0;
-  padding-left: 1.2em;
+@media (max-width: 600px) {
+  .chronology td:first-child {
+    white-space: normal;
+  }
+
+  .post-toc {
+    padding: 22px 20px;
+  }
 }
 
-.post-body blockquote li {
-  color: var(--ink-soft);
-  font-size: 0.9rem;
-  margin-bottom: 10px;
-  line-height: 1.8;
-}
-
-.post-body blockquote li:last-child {
-  margin-bottom: 0;
-}
-
-.post-body blockquote li strong {
-  color: var(--forest-deep);
-}
-
-/* しおりのひとこと（記事末尾の感想・問いかけ） */
-.shiori-note {
+/* 章末のひとこと */
+.note {
   margin-top: 36px;
   padding: 24px 28px;
-  background: var(--sand);
+  background: var(--parchment);
   border: 1px solid var(--line);
   border-left: 4px solid var(--accent);
   border-radius: 4px;
 }
 
-.shiori-note-title {
+.note-title {
   font-size: 0.8rem;
   font-weight: 700;
   color: var(--accent);
@@ -617,60 +634,25 @@ h2 span {
   margin-bottom: 10px;
 }
 
-.shiori-note p:not(.shiori-note-title) {
+.note p:not(.note-title) {
   font-size: 0.95rem;
-  color: var(--forest-deep);
+  color: var(--navy-deep);
   line-height: 1.9;
 }
 
-/* 姉妹サイト（ヨーロッパの歴史）への案内：あちらの紺色で目印に */
-.sister {
+.chapter-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 56px;
+  padding-top: 24px;
   border-top: 1px solid var(--line);
-}
-
-.sister .section-inner {
-  padding-top: 60px;
-  padding-bottom: 60px;
-}
-
-.sister-card {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  background: var(--sand);
-  border: 1px solid var(--line);
-  border-left: 4px solid #2f4570;
-  border-radius: 4px;
-  padding: 32px 36px;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.sister-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(36, 56, 44, 0.08);
-}
-
-.sister-icon {
-  flex-shrink: 0;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: #2f4570;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.6rem;
-}
-
-.sister-name {
-  font-weight: 700;
-  color: #1c2a44;
-  margin-bottom: 4px;
-}
-
-.sister-desc {
   font-size: 0.9rem;
-  color: var(--ink-soft);
+}
+
+.chapter-nav a {
+  color: var(--navy);
+  border-bottom: 1px solid var(--navy-soft);
 }
 
 /* Footer */
@@ -680,4 +662,32 @@ h2 span {
   color: var(--ink-soft);
   font-size: 0.8rem;
   border-top: 1px solid var(--line);
+}
+
+.site-footer a {
+  color: var(--navy);
+  border-bottom: 1px solid var(--navy-soft);
+}
+
+@media (max-width: 600px) {
+  .hero {
+    width: calc(100% - 32px);
+  }
+
+  .hero-inner {
+    padding: 80px 16px 64px;
+  }
+
+  .section-inner {
+    padding: 64px 16px;
+  }
+
+  .header-inner {
+    padding: 14px 16px;
+  }
+
+  .sister-card {
+    padding: 24px 20px;
+    gap: 18px;
+  }
 }
