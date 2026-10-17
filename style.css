@@ -678,6 +678,23 @@ h2 span {
   color: var(--ink-soft);
 }
 
+.sister-card + .sister-card {
+  margin-top: 18px;
+}
+
+/* 英語でめぐる世界の町：あちらのスタンプの赤で目印に */
+.sister-card-english {
+  border-left-color: #d9472b;
+}
+
+.sister-card-english .sister-icon {
+  background: #fbe5de;
+}
+
+.sister-card-english .sister-name {
+  color: #b5361e;
+}
+
 /* Footer */
 .site-footer {
   text-align: center;
