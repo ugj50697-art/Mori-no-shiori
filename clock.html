@@ -12,7 +12,8 @@
 
   /* 時間帯ごとの色（JS で body に class を付ける） */
   body {
-    --bg1: #f5f2ea; --bg2: #e6eadf; --text: #24382c; --sub: #5c7a63; --line: rgba(36, 56, 44, 0.18);
+    --bg1: #f5f2ea; --bg2: #e3e8dc; --text: #24382c; --sub: #5c7a63; --line: rgba(36, 56, 44, 0.18);
+    --frame: #5c7a63; --frame-dark: #3d5c46; --face: #fbfaf6;
     min-height: 100vh;
     min-height: 100dvh;
     display: flex;
@@ -22,10 +23,22 @@
     background: radial-gradient(circle at 25% 20%, var(--bg2), transparent 60%), var(--bg1);
     transition: background 1.5s ease, color 1.5s ease;
   }
-  body.morning { --bg1: #eef5e4; --bg2: #cfe3bd; --text: #2f4a35; --sub: #5c7a63; --line: rgba(47, 74, 53, 0.2); }
-  body.day     { --bg1: #f5f2ea; --bg2: #e3e8dc; --text: #24382c; --sub: #5c7a63; --line: rgba(36, 56, 44, 0.18); }
-  body.evening { --bg1: #f6e3d3; --bg2: #e9b48e; --text: #5a2e17; --sub: #8a4f2d; --line: rgba(90, 46, 23, 0.2); }
-  body.night   { --bg1: #1c2c22; --bg2: #2e4636; --text: #f5f2ea; --sub: #b9c9bb; --line: rgba(245, 242, 234, 0.22); }
+  body.morning {
+    --bg1: #eef5e4; --bg2: #cfe3bd; --text: #2f4a35; --sub: #5c7a63; --line: rgba(47, 74, 53, 0.2);
+    --frame: #8fb06f; --frame-dark: #5f8247; --face: #fbfdf6;
+  }
+  body.day {
+    --bg1: #f5f2ea; --bg2: #e3e8dc; --text: #24382c; --sub: #5c7a63; --line: rgba(36, 56, 44, 0.18);
+    --frame: #5c7a63; --frame-dark: #3d5c46; --face: #fbfaf6;
+  }
+  body.evening {
+    --bg1: #f6e3d3; --bg2: #e9b48e; --text: #5a2e17; --sub: #8a4f2d; --line: rgba(90, 46, 23, 0.2);
+    --frame: #c06a3c; --frame-dark: #8e4422; --face: #fdf6ef;
+  }
+  body.night {
+    --bg1: #1c2c22; --bg2: #2e4636; --text: #f5f2ea; --sub: #b9c9bb; --line: rgba(245, 242, 234, 0.22);
+    --frame: #c9b98a; --frame-dark: #9c8d60; --face: #24382c;
+  }
 
   header {
     padding: 20px 24px;
@@ -51,37 +64,54 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 48px 16px 64px;
+    padding: 40px 16px 56px;
   }
 
   h1 {
     font-size: clamp(1.1rem, 3vw, 1.4rem);
     letter-spacing: 0.3em;
     color: var(--sub);
-    margin-bottom: 28px;
+    margin-bottom: 24px;
   }
 
-  .time {
+  /* クラシック時計 */
+  .clock {
+    width: min(82vw, 420px);
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.18));
+  }
+  .clock .rim-outer { fill: var(--frame-dark); transition: fill 1.5s ease; }
+  .clock .rim       { fill: var(--frame); transition: fill 1.5s ease; }
+  .clock .face      { fill: var(--face); stroke: var(--frame-dark); stroke-width: 2; transition: fill 1.5s ease; }
+  .clock .tick      { stroke: var(--sub); stroke-width: 1.5; stroke-linecap: round; }
+  .clock .tick.hour { stroke: var(--text); stroke-width: 4; }
+  .clock .num {
+    fill: var(--text);
+    font-family: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
+    font-weight: 500;
+    font-size: 30px;
+  }
+  .clock .time {
+    fill: var(--text);
     font-family: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
     font-weight: 700;
-    font-size: clamp(5rem, 22vw, 12rem);
-    line-height: 1;
-    letter-spacing: 0.04em;
+    font-size: 84px;
     font-variant-numeric: tabular-nums;
   }
-  .colon { animation: blink 2s steps(1) infinite; }
-  @keyframes blink { 50% { opacity: 0.25; } }
+  .clock .colon { animation: blink 2s steps(1) infinite; }
+  @keyframes blink { 50% { fill-opacity: 0.25; } }
 
   .date {
     font-family: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
     font-weight: 500;
     font-size: clamp(1.1rem, 4vw, 1.6rem);
     letter-spacing: 0.1em;
-    margin-top: 24px;
+    margin-top: 32px;
   }
 
   .remain {
-    margin-top: 40px;
+    margin-top: 28px;
     padding: 12px 28px;
     border: 1px solid var(--line);
     border-radius: 999px;
@@ -113,7 +143,17 @@
 
 <main>
   <h1>森の時計</h1>
-  <p class="time" id="time">--<span class="colon">:</span>--</p>
+
+  <svg class="clock" viewBox="0 0 400 400" role="img" aria-labelledby="clock-label">
+    <title id="clock-label">現在の時刻</title>
+    <circle class="rim-outer" cx="200" cy="200" r="198"/>
+    <circle class="rim" cx="200" cy="200" r="190"/>
+    <circle class="face" cx="200" cy="200" r="170"/>
+    <g id="ticks"></g>
+    <g id="nums"></g>
+    <text class="time" id="time" x="200" y="200" text-anchor="middle" dominant-baseline="central">--:--</text>
+  </svg>
+
   <p class="date" id="date">&nbsp;</p>
   <p class="remain">今年もあと<strong id="remain">--</strong>日</p>
 </main>
@@ -124,6 +164,36 @@
 
 <script>
   const WEEK = ["日", "月", "火", "水", "木", "金", "土"];
+  const SVG = "http://www.w3.org/2000/svg";
+
+  // 文字盤の目盛りと数字（1〜12）を描く
+  (function drawDial() {
+    const ticks = document.getElementById("ticks");
+    const nums = document.getElementById("nums");
+    for (let i = 0; i < 60; i++) {
+      const a = (i * 6) * Math.PI / 180;
+      const isHour = i % 5 === 0;
+      const r1 = isHour ? 150 : 158;
+      const line = document.createElementNS(SVG, "line");
+      line.setAttribute("x1", 200 + r1 * Math.sin(a));
+      line.setAttribute("y1", 200 - r1 * Math.cos(a));
+      line.setAttribute("x2", 200 + 164 * Math.sin(a));
+      line.setAttribute("y2", 200 - 164 * Math.cos(a));
+      line.setAttribute("class", isHour ? "tick hour" : "tick");
+      ticks.appendChild(line);
+    }
+    for (let n = 1; n <= 12; n++) {
+      const a = (n * 30) * Math.PI / 180;
+      const t = document.createElementNS(SVG, "text");
+      t.setAttribute("x", 200 + 126 * Math.sin(a));
+      t.setAttribute("y", 200 - 126 * Math.cos(a));
+      t.setAttribute("text-anchor", "middle");
+      t.setAttribute("dominant-baseline", "central");
+      t.setAttribute("class", "num");
+      t.textContent = n;
+      nums.appendChild(t);
+    }
+  })();
 
   function themeFor(hour) {
     if (hour >= 6 && hour < 10) return "morning";
@@ -136,7 +206,7 @@
     const now = new Date();
     const h = String(now.getHours()).padStart(2, "0");
     const m = String(now.getMinutes()).padStart(2, "0");
-    document.getElementById("time").innerHTML = h + '<span class="colon">:</span>' + m;
+    document.getElementById("time").innerHTML = h + '<tspan class="colon">:</tspan>' + m;
 
     document.getElementById("date").textContent =
       now.getFullYear() + "年" + (now.getMonth() + 1) + "月" + now.getDate() + "日（" + WEEK[now.getDay()] + "）";
