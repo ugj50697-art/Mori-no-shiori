@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>森の時計｜森のしおり</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* 時間帯ごとの色（JS で body に class を付ける） */
+  body {
+    --bg1: #f5f2ea; --bg2: #e6eadf; --text: #24382c; --sub: #5c7a63; --line: rgba(36, 56, 44, 0.18);
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    font-family: "Noto Serif JP", "Shippori Mincho", serif;
+    color: var(--text);
+    background: radial-gradient(circle at 25% 20%, var(--bg2), transparent 60%), var(--bg1);
+    transition: background 1.5s ease, color 1.5s ease;
+  }
+  body.morning { --bg1: #eef5e4; --bg2: #cfe3bd; --text: #2f4a35; --sub: #5c7a63; --line: rgba(47, 74, 53, 0.2); }
+  body.day     { --bg1: #f5f2ea; --bg2: #e3e8dc; --text: #24382c; --sub: #5c7a63; --line: rgba(36, 56, 44, 0.18); }
+  body.evening { --bg1: #f6e3d3; --bg2: #e9b48e; --text: #5a2e17; --sub: #8a4f2d; --line: rgba(90, 46, 23, 0.2); }
+  body.night   { --bg1: #1c2c22; --bg2: #2e4636; --text: #f5f2ea; --sub: #b9c9bb; --line: rgba(245, 242, 234, 0.22); }
+
+  header {
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .logo { font-weight: 700; letter-spacing: 0.1em; }
+  header a {
+    color: var(--sub);
+    text-decoration: none;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+  }
+  header a:hover { text-decoration: underline; }
+
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 48px 16px 64px;
+  }
+
+  h1 {
+    font-size: clamp(1.1rem, 3vw, 1.4rem);
+    letter-spacing: 0.3em;
+    color: var(--sub);
+    margin-bottom: 28px;
+  }
+
+  .time {
+    font-family: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
+    font-weight: 700;
+    font-size: clamp(5rem, 22vw, 12rem);
+    line-height: 1;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+  .colon { animation: blink 2s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0.25; } }
+
+  .date {
+    font-family: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
+    font-weight: 500;
+    font-size: clamp(1.1rem, 4vw, 1.6rem);
+    letter-spacing: 0.1em;
+    margin-top: 24px;
+  }
+
+  .remain {
+    margin-top: 40px;
+    padding: 12px 28px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: clamp(0.95rem, 3vw, 1.1rem);
+    letter-spacing: 0.1em;
+    color: var(--sub);
+  }
+  .remain strong {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-size: 1.3em;
+    color: var(--text);
+    margin: 0 2px;
+  }
+
+  footer {
+    text-align: center;
+    padding: 20px 16px;
+    font-size: 0.8rem;
+    color: var(--sub);
+  }
+</style>
+</head>
+<body class="day">
+
+<header>
+  <p class="logo">森のしおり</p>
+  <a href="index.html">← トップへもどる</a>
+</header>
+
+<main>
+  <h1>森の時計</h1>
+  <p class="time" id="time">--<span class="colon">:</span>--</p>
+  <p class="date" id="date">&nbsp;</p>
+  <p class="remain">今年もあと<strong id="remain">--</strong>日</p>
+</main>
+
+<footer>
+  <p>&copy; 2026 森のしおり</p>
+</footer>
+
+<script>
+  const WEEK = ["日", "月", "火", "水", "木", "金", "土"];
+
+  function themeFor(hour) {
+    if (hour >= 6 && hour < 10) return "morning";
+    if (hour >= 10 && hour < 17) return "day";
+    if (hour >= 17 && hour < 19) return "evening";
+    return "night";
+  }
+
+  function update() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, "0");
+    const m = String(now.getMinutes()).padStart(2, "0");
+    document.getElementById("time").innerHTML = h + '<span class="colon">:</span>' + m;
+
+    document.getElementById("date").textContent =
+      now.getFullYear() + "年" + (now.getMonth() + 1) + "月" + now.getDate() + "日（" + WEEK[now.getDay()] + "）";
+
+    // 今日を数えずに、12月31日までの日数
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const lastDay = new Date(now.getFullYear(), 11, 31);
+    document.getElementById("remain").textContent = Math.round((lastDay - today) / 86400000);
+
+    document.body.className = themeFor(now.getHours());
+  }
+
+  update();
+  // 分が変わる瞬間にそろえて更新する
+  setTimeout(function () {
+    update();
+    setInterval(update, 60000);
+  }, 60000 - (Date.now() % 60000));
+</script>
+
+</body>
+</html>

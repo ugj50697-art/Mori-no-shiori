@@ -119,6 +119,25 @@ a {
   font-size: 0.85rem;
 }
 
+.hero-clock {
+  display: inline-block;
+  margin-top: 26px;
+  padding: 8px 22px;
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  color: var(--forest);
+  background: var(--paper);
+  border: 1px solid var(--forest-soft);
+  border-radius: 999px;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+.hero-clock:hover {
+  background: var(--forest);
+  color: var(--paper);
+}
+
 .hero-message {
   max-width: 640px;
   margin: 44px auto 0;
