@@ -83,9 +83,10 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
+    align-items: stretch; /* カレンダーを時計の列と同じ高さにのばす */
     gap: 40px 56px;
   }
+  .timer { align-self: center; }
   .clock-side {
     display: flex;
     flex-direction: column;
@@ -234,7 +235,11 @@
   .timer-msg button { margin-top: 8px; }
 
   /* 季節のカレンダー */
-  .calendar { width: min(100%, 480px); }
+  .calendar {
+    width: min(100%, 480px);
+    display: flex;
+    flex-direction: column;
+  }
   .cal-head {
     display: flex;
     justify-content: space-between;
@@ -258,12 +263,16 @@
   }
   .cal-nav:hover { background: var(--frame); color: var(--face); }
   .cal-grid {
+    flex: 1;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: auto;
+    grid-auto-rows: 1fr;
     gap: 3px;
   }
   .cal-week {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
+    font-weight: 700;
     color: var(--sub);
     padding-bottom: 6px;
   }
@@ -276,9 +285,10 @@
     align-items: center;
     gap: 2px;
   }
-  .cal-day .d { font-size: 0.95rem; font-weight: 500; }
+  .cal-day .d { font-size: 1.2rem; font-weight: 700; }
   .cal-day .ev {
-    font-size: 0.6rem;
+    font-size: 0.72rem;
+    font-weight: 500;
     line-height: 1.25;
     color: var(--sub);
   }
@@ -331,8 +341,6 @@
 </header>
 
 <main>
-  <h1>森の時計</h1>
-
   <div class="layout">
     <section class="panel timer" aria-label="木の葉タイマー">
       <p class="panel-title">⏳ タイマー</p>
@@ -360,6 +368,7 @@
     </section>
 
     <div class="clock-side">
+      <h1>森の時計</h1>
       <svg class="clock" viewBox="0 0 400 400" role="img" aria-labelledby="clock-label">
         <title id="clock-label">現在の時刻</title>
         <circle class="rim-outer" cx="200" cy="200" r="198"/>
