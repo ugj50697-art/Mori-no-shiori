@@ -76,10 +76,10 @@
     margin-bottom: 24px;
   }
 
-  /* 時計とカレンダーを横に並べる（狭い画面では縦） */
+  /* タイマー・時計・カレンダーを横に並べる（狭い画面では折り返す） */
   .layout {
     width: 100%;
-    max-width: 1100px;
+    max-width: 1500px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -140,9 +140,8 @@
     margin: 0 2px;
   }
 
-  /* 季節のカレンダー */
-  .calendar {
-    width: min(100%, 480px);
+  /* カード（タイマー・カレンダー共通） */
+  .panel {
     padding: 22px 18px 20px;
     background: var(--face);
     border: 1px solid var(--line);
@@ -151,6 +150,91 @@
     font-family: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
     transition: background 1.5s ease;
   }
+
+  /* 木の葉タイマー */
+  .timer { width: min(100%, 300px); }
+  .panel-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+  .tree { width: 100%; height: auto; display: block; overflow: visible; }
+  .tree .trunk  { fill: #7a5634; }
+  .tree .ground { fill: var(--line); }
+  .tree .drop {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .tree .drop.fallen {
+    animation: leaf-fall 3s ease-in forwards;
+  }
+  @keyframes leaf-fall {
+    0%   { transform: translate(0, 0) rotate(0deg); }
+    30%  { transform: translate(calc(var(--dx) * -0.6), calc(var(--dy) * 0.3)) rotate(90deg); }
+    65%  { transform: translate(calc(var(--dx) * 0.8), calc(var(--dy) * 0.7)) rotate(200deg); }
+    100% { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); opacity: 0.8; }
+  }
+  .timer-display {
+    font-size: clamp(2.4rem, 8vw, 3rem);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    font-variant-numeric: tabular-nums;
+    margin: 4px 0 10px;
+  }
+  .timer-set {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .timer-set span { min-width: 4.5em; font-size: 1.05rem; }
+  .timer-btn {
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--text);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 8px 18px;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+  .timer-btn.round { width: 40px; height: 40px; padding: 0; font-size: 1.3rem; }
+  .timer-btn.main  { background: var(--frame); border-color: var(--frame); color: var(--face); }
+  .timer-btn:hover:not(:disabled) { border-color: var(--frame); }
+  .timer-btn:disabled { opacity: 0.35; cursor: default; }
+  .song-select {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 14px;
+    color: var(--sub);
+  }
+  .song-btn {
+    font-family: inherit;
+    font-size: 0.85rem;
+    color: var(--sub);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 4px 12px;
+    cursor: pointer;
+  }
+  .song-btn[aria-pressed="true"] {
+    color: var(--text);
+    border-color: var(--frame);
+    font-weight: 700;
+    box-shadow: inset 0 0 0 1px var(--frame);
+  }
+  .timer-actions { display: flex; justify-content: center; gap: 10px; }
+  .timer-msg { margin-top: 14px; min-height: 1.5em; font-size: 0.95rem; color: var(--sub); }
+  .timer-msg button { margin-top: 8px; }
+
+  /* 季節のカレンダー */
+  .calendar { width: min(100%, 480px); }
   .cal-head {
     display: flex;
     justify-content: space-between;
@@ -220,6 +304,11 @@
     margin-bottom: 2px;
   }
 
+  /* スマホでは 時計 → タイマー → カレンダー の順 */
+  @media (max-width: 760px) {
+    .clock-side { order: -1; }
+  }
+
   @media (max-width: 420px) {
     .calendar { padding: 18px 10px 16px; }
     .cal-day { min-height: 50px; }
@@ -245,6 +334,31 @@
   <h1>森の時計</h1>
 
   <div class="layout">
+    <section class="panel timer" aria-label="木の葉タイマー">
+      <p class="panel-title">⏳ タイマー</p>
+      <svg class="tree" viewBox="0 0 300 260" aria-hidden="true">
+        <ellipse class="ground" cx="150" cy="246" rx="130" ry="10"/>
+        <path class="trunk" d="M140 246 C142 210 143 185 138 160 L128 130 L134 128 L146 152 L150 112 L156 112 L157 150 L172 124 L178 128 L162 162 C158 190 160 215 162 246 Z"/>
+        <g id="leaves"></g>
+      </svg>
+      <p class="timer-display" id="timer-display">25:00</p>
+      <div class="timer-set">
+        <button class="timer-btn round" id="timer-minus" type="button" aria-label="1分へらす">−</button>
+        <span id="timer-min">25分</span>
+        <button class="timer-btn round" id="timer-plus" type="button" aria-label="1分ふやす">＋</button>
+      </div>
+      <div class="song-select" role="group" aria-label="流す曲">
+        <span>♪</span>
+        <button class="song-btn" type="button" data-song="furusato">ふるさと</button>
+        <button class="song-btn" type="button" data-song="momotaro">桃太郎</button>
+      </div>
+      <div class="timer-actions">
+        <button class="timer-btn main" id="timer-start" type="button">スタート</button>
+        <button class="timer-btn" id="timer-reset" type="button">リセット</button>
+      </div>
+      <div class="timer-msg" id="timer-msg" aria-live="polite"></div>
+    </section>
+
     <div class="clock-side">
       <svg class="clock" viewBox="0 0 400 400" role="img" aria-labelledby="clock-label">
         <title id="clock-label">現在の時刻</title>
@@ -263,7 +377,7 @@
       <p class="remain">今年もあと<strong id="remain">--</strong>日</p>
     </div>
 
-    <section class="calendar" aria-label="季節のカレンダー">
+    <section class="panel calendar" aria-label="季節のカレンダー">
       <div class="cal-head">
         <button class="cal-nav" id="cal-prev" type="button" aria-label="前の月">‹</button>
         <p class="cal-title" id="cal-title"></p>
@@ -442,6 +556,237 @@
   }
   document.getElementById("cal-prev").addEventListener("click", function () { moveMonth(-1); });
   document.getElementById("cal-next").addEventListener("click", function () { moveMonth(1); });
+
+  // ---- 木の葉タイマー ----
+
+  const LEAF_COUNT = 40;
+  const LEAF_COLORS = ["#3d5c46", "#5f8247", "#7a9a5e", "#8fb06f", "#a8c47e"];
+  const leaves = [];
+
+  // 木の葉を並べる（毎回同じ形になるよう、決まった乱数を使う）
+  (function drawLeaves() {
+    let seed = 7;
+    const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const group = document.getElementById("leaves");
+    for (let i = 0; i < LEAF_COUNT; i++) {
+      const a = rand() * Math.PI * 2;
+      const r = Math.sqrt(rand());
+      const x = 150 + Math.cos(a) * r * 95;
+      const y = 95 + Math.sin(a) * r * 62;
+      const drop = document.createElementNS(SVG, "g");
+      drop.setAttribute("class", "drop");
+      drop.style.setProperty("--dx", Math.round((rand() - 0.5) * 120) + "px");
+      drop.style.setProperty("--dy", Math.round(240 - y + rand() * 8) + "px");
+      drop.style.setProperty("--rot", Math.round(rand() * 360) + "deg");
+      const leaf = document.createElementNS(SVG, "path");
+      leaf.setAttribute("d", "M0 -11 C7 -6 7 6 0 11 C-7 6 -7 -6 0 -11 Z");
+      leaf.setAttribute("fill", LEAF_COLORS[Math.floor(rand() * LEAF_COLORS.length)]);
+      leaf.setAttribute("transform", "translate(" + x.toFixed(1) + " " + y.toFixed(1) + ") rotate(" + Math.round(rand() * 360) + ")");
+      drop.appendChild(leaf);
+      group.appendChild(drop);
+      leaves.push(drop);
+    }
+    // 散る順番をばらばらにする
+    for (let i = leaves.length - 1; i > 0; i--) {
+      const j = Math.floor(rand() * (i + 1));
+      [leaves[i], leaves[j]] = [leaves[j], leaves[i]];
+    }
+  })();
+
+  // オルゴールの曲（どちらも岡野貞一作曲。音の高さ, 長さ[拍]、null は休み）
+  const FURUSATO = [
+    [79, 1], [79, 1], [79, 1], [81, 1.5], [83, 0.5], [81, 1], [83, 1], [83, 1], [84, 1], [86, 2], [null, 1],
+    [84, 1], [86, 1], [88, 1], [83, 1.5], [84, 0.5], [83, 1], [81, 1], [81, 1], [78, 1], [79, 2], [null, 1],
+    [81, 0.5], [79, 0.5], [81, 1], [74, 1], [79, 0.5], [81, 0.5], [83, 1], [83, 1],
+    [84, 0.5], [83, 0.5], [84, 1.5], [88, 0.5], [86, 0.5], [84, 0.5], [83, 1], [null, 1],
+    [86, 1], [86, 1], [86, 1], [79, 1.5], [81, 0.5], [83, 1], [84, 1], [84, 1], [81, 1], [79, 2], [null, 1]
+  ];
+  const MOMOTARO = [
+    [81, 1.5], [83, 0.5], [81, 0.5], [81, 0.5], [78, 1], [81, 0.5], [81, 0.5], [78, 0.5], [74, 0.5], [76, 1.5], [null, 0.5],
+    [74, 0.5], [74, 0.5], [76, 0.5], [76, 0.5], [78, 0.5], [78, 0.5], [76, 1], [78, 0.5], [78, 0.5], [83, 0.5], [83, 0.5], [81, 1.5], [null, 0.5],
+    [86, 0.5], [86, 0.5], [81, 1], [78, 0.5], [78, 0.5], [83, 0.5], [83, 0.5], [81, 0.5], [81, 0.5], [78, 0.5], [76, 0.5], [74, 1.5], [null, 0.5]
+  ];
+  const SONGS = {
+    furusato: { notes: FURUSATO, beat: 0.68 },  // 1拍の秒数
+    momotaro: { notes: MOMOTARO, beat: 0.52 }
+  };
+  let songName = "furusato";
+  try { if (SONGS[localStorage.getItem("mori-timer-song")]) songName = localStorage.getItem("mori-timer-song"); } catch (e) {}
+
+  let audio = null;
+  let musicNodes = [];
+  let musicTimer = null;
+
+  function musicBoxNote(freq, start, dur) {
+    const out = audio.createGain();
+    out.gain.setValueAtTime(0, start);
+    out.gain.linearRampToValueAtTime(0.28, start + 0.005);
+    out.gain.exponentialRampToValueAtTime(0.001, start + Math.max(dur, 1.4));
+    out.connect(audio.destination);
+    // 基音＋高い倍音で、金属の歯を弾いたような音にする
+    [[1, 1], [2.01, 0.35], [4.2, 0.12]].forEach(function (p) {
+      const osc = audio.createOscillator();
+      const g = audio.createGain();
+      osc.type = "sine";
+      osc.frequency.value = freq * p[0];
+      g.gain.value = p[1];
+      osc.connect(g).connect(out);
+      osc.start(start);
+      osc.stopTime = start + Math.max(dur, 1.4) + 0.05;
+      osc.stop(osc.stopTime);
+      musicNodes.push(osc);
+    });
+  }
+
+  // 「音を止める」を押すまで、1回分ずつ予約してくり返す
+  function playSong() {
+    silence();
+    let t = audio.currentTime + 0.1;
+    (function round() {
+      const song = SONGS[songName];
+      song.notes.forEach(function (n) {
+        const len = n[1] * song.beat;
+        if (n[0] !== null) musicBoxNote(440 * Math.pow(2, (n[0] - 69) / 12), t, len);
+        t += len;
+      });
+      t += song.beat;
+      // 鳴り終わった音は片づける
+      musicNodes = musicNodes.filter(function (o) { return o.stopTime > audio.currentTime; });
+      musicTimer = setTimeout(round, Math.max(0, (t - audio.currentTime - 1) * 1000));
+    })();
+  }
+
+  function silence() {
+    musicNodes.forEach(function (o) { try { o.stop(); } catch (e) {} });
+    musicNodes = [];
+    clearTimeout(musicTimer);
+  }
+
+  function stopMusic() {
+    silence();
+    const stopBtn = document.getElementById("music-stop");
+    if (stopBtn) stopBtn.remove();
+  }
+
+  let setMinutes = 25;
+  let remainMs = setMinutes * 60000;
+  let endAt = 0;        // 動いている間の終わる時刻
+  let tickTimer = null;
+  let doneTimer = null; // 別のタブを見ている間も、時間ぴったりに鳴らすため
+  let state = "idle";   // idle / running / paused / done
+
+  function fmt(ms) {
+    const s = Math.ceil(ms / 1000);
+    return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0");
+  }
+
+  function drawTimer() {
+    document.getElementById("timer-display").textContent = fmt(remainMs);
+    document.getElementById("timer-min").textContent = setMinutes + "分";
+    const total = setMinutes * 60000;
+    const left = state === "idle" ? LEAF_COUNT : Math.ceil(LEAF_COUNT * remainMs / total);
+    leaves.forEach(function (leaf, i) {
+      leaf.classList.toggle("fallen", i >= left);
+    });
+    const editable = state === "idle";
+    document.getElementById("timer-minus").disabled = !editable || setMinutes <= 1;
+    document.getElementById("timer-plus").disabled = !editable || setMinutes >= 120;
+    document.getElementById("timer-start").textContent =
+      state === "running" ? "一時停止" : state === "paused" ? "再開" : "スタート";
+    document.getElementById("timer-start").disabled = state === "done";
+  }
+
+  function tick() {
+    if (state !== "running") return;
+    remainMs = Math.max(0, endAt - Date.now());
+    if (remainMs === 0) {
+      clearInterval(tickTimer);
+      clearTimeout(doneTimer);
+      state = "done";
+      const msg = document.getElementById("timer-msg");
+      msg.innerHTML = "🍂 時間です！<br>";
+      const stopBtn = document.createElement("button");
+      stopBtn.className = "timer-btn";
+      stopBtn.id = "music-stop";
+      stopBtn.type = "button";
+      stopBtn.textContent = "♪ 音を止める";
+      stopBtn.addEventListener("click", stopMusic);
+      msg.appendChild(stopBtn);
+      playSong();
+    }
+    drawTimer();
+  }
+
+  function changeMinutes(n) {
+    if (state !== "idle") return;
+    setMinutes = Math.min(120, Math.max(1, setMinutes + n));
+    remainMs = setMinutes * 60000;
+    drawTimer();
+  }
+
+  // ＋−は押し続けると続けて変わる
+  function holdButton(id, n) {
+    const btn = document.getElementById(id);
+    let wait = null, repeat = null;
+    const stop = function () { clearTimeout(wait); clearInterval(repeat); };
+    btn.addEventListener("pointerdown", function (e) {
+      e.preventDefault();
+      changeMinutes(n);
+      wait = setTimeout(function () { repeat = setInterval(function () { changeMinutes(n); }, 120); }, 450);
+    });
+    ["pointerup", "pointerleave", "pointercancel"].forEach(function (ev) { btn.addEventListener(ev, stop); });
+    btn.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); changeMinutes(n); }
+    });
+  }
+  holdButton("timer-minus", -1);
+  holdButton("timer-plus", 1);
+
+  // 曲の切り替え（選んだ曲はこのブラウザに覚えておく）
+  function drawSongButtons() {
+    document.querySelectorAll(".song-btn").forEach(function (b) {
+      b.setAttribute("aria-pressed", b.dataset.song === songName);
+    });
+  }
+  document.querySelectorAll(".song-btn").forEach(function (b) {
+    b.addEventListener("click", function () {
+      songName = b.dataset.song;
+      try { localStorage.setItem("mori-timer-song", songName); } catch (e) {}
+      drawSongButtons();
+    });
+  });
+  drawSongButtons();
+
+  document.getElementById("timer-start").addEventListener("click", function () {
+    // 音はボタンを押したときに準備しておく（スマホで鳴らすため）
+    if (!audio) audio = new (window.AudioContext || window.webkitAudioContext)();
+    if (audio.state === "suspended") audio.resume();
+
+    if (state === "running") {
+      clearInterval(tickTimer);
+      clearTimeout(doneTimer);
+      remainMs = Math.max(0, endAt - Date.now());
+      state = "paused";
+    } else {
+      endAt = Date.now() + remainMs;
+      state = "running";
+      tickTimer = setInterval(tick, 250);
+      doneTimer = setTimeout(tick, remainMs + 20);
+    }
+    drawTimer();
+  });
+
+  document.getElementById("timer-reset").addEventListener("click", function () {
+    clearInterval(tickTimer);
+    clearTimeout(doneTimer);
+    stopMusic();
+    state = "idle";
+    remainMs = setMinutes * 60000;
+    document.getElementById("timer-msg").textContent = "";
+    drawTimer();
+  });
+
+  drawTimer();
 
   // ---- 時計 ----
 
