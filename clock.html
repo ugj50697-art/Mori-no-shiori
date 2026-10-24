@@ -76,7 +76,7 @@
 
   /* クラシック時計 */
   .clock {
-    width: min(82vw, 420px);
+    width: min(92vw, 75vh, 580px);
     height: auto;
     display: block;
     filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.18));
@@ -92,15 +92,11 @@
     font-weight: 500;
     font-size: 30px;
   }
-  .clock .time {
-    fill: var(--text);
-    font-family: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
-    font-weight: 700;
-    font-size: 84px;
-    font-variant-numeric: tabular-nums;
-  }
-  .clock .colon { animation: blink 2s steps(1) infinite; }
-  @keyframes blink { 50% { fill-opacity: 0.25; } }
+  .clock .hand        { stroke: var(--text); stroke-linecap: round; }
+  .clock .hand-hour   { stroke-width: 9; }
+  .clock .hand-minute { stroke-width: 6; }
+  .clock .hand-second { stroke: #c0392b; stroke-width: 2.5; }
+  .clock .pin         { fill: #c0392b; stroke: var(--face); stroke-width: 2; }
 
   .date {
     font-family: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
@@ -151,7 +147,10 @@
     <circle class="face" cx="200" cy="200" r="170"/>
     <g id="ticks"></g>
     <g id="nums"></g>
-    <text class="time" id="time" x="200" y="200" text-anchor="middle" dominant-baseline="central">--:--</text>
+    <line class="hand hand-hour" id="hand-hour" x1="200" y1="214" x2="200" y2="110"/>
+    <line class="hand hand-minute" id="hand-minute" x1="200" y1="220" x2="200" y2="62"/>
+    <line class="hand hand-second" id="hand-second" x1="200" y1="232" x2="200" y2="48"/>
+    <circle class="pin" cx="200" cy="200" r="7"/>
   </svg>
 
   <p class="date" id="date">&nbsp;</p>
@@ -204,9 +203,13 @@
 
   function update() {
     const now = new Date();
-    const h = String(now.getHours()).padStart(2, "0");
-    const m = String(now.getMinutes()).padStart(2, "0");
-    document.getElementById("time").innerHTML = h + '<tspan class="colon">:</tspan>' + m;
+    // 針の角度（12時の方向が0度）
+    const sec = now.getSeconds();
+    const min = now.getMinutes() + sec / 60;
+    const hour = (now.getHours() % 12) + min / 60;
+    document.getElementById("hand-hour").setAttribute("transform", "rotate(" + hour * 30 + " 200 200)");
+    document.getElementById("hand-minute").setAttribute("transform", "rotate(" + min * 6 + " 200 200)");
+    document.getElementById("hand-second").setAttribute("transform", "rotate(" + sec * 6 + " 200 200)");
 
     document.getElementById("date").textContent =
       now.getFullYear() + "年" + (now.getMonth() + 1) + "月" + now.getDate() + "日（" + WEEK[now.getDay()] + "）";
@@ -220,11 +223,11 @@
   }
 
   update();
-  // 分が変わる瞬間にそろえて更新する
+  // 秒が変わる瞬間にそろえて、1秒ごとに更新する（秒針がチクタク動く）
   setTimeout(function () {
     update();
-    setInterval(update, 60000);
-  }, 60000 - (Date.now() % 60000));
+    setInterval(update, 1000);
+  }, 1000 - (Date.now() % 1000));
 </script>
 
 </body>
