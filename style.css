@@ -573,6 +573,26 @@ h2 span {
   font-weight: 600;
 }
 
+/* 大事なところを色で（緑・青・赤）。少し大きく太く */
+.post-body .mark-green,
+.post-body .mark-blue,
+.post-body .mark-red {
+  font-size: 1.08em;
+  font-weight: 700;
+}
+
+.post-body .mark-green {
+  color: #1f7a6d;
+}
+
+.post-body .mark-blue {
+  color: #2f4570;
+}
+
+.post-body .mark-red {
+  color: #c0392b;
+}
+
 .post-body .closing {
   font-weight: 600;
   color: var(--forest-deep);
