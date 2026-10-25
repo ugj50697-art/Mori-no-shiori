@@ -163,6 +163,214 @@ a {
   line-height: 1.9;
 }
 
+/* 英語でめぐる世界の町への入り口（ページ上部の帯）：スタンプの赤で目印に */
+.english-banner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 6px 18px;
+  max-width: 1200px;
+  width: calc(100% - 48px);
+  margin: 16px auto;
+  padding: 12px 20px;
+  background: #fbe5de;
+  border: 1px solid #f0c5b8;
+  border-radius: 4px;
+  text-align: center;
+  transition: background 0.2s;
+}
+
+.english-banner:hover {
+  background: #f8d6cb;
+}
+
+.english-banner-lead {
+  font-size: 0.85rem;
+  color: #8a3a28;
+  letter-spacing: 0.08em;
+}
+
+.english-banner-go {
+  font-weight: 700;
+  color: #fff;
+  background: #d9472b;
+  border-radius: 999px;
+  padding: 4px 18px;
+  letter-spacing: 0.05em;
+}
+
+/* 初めての方へ（3つの入り口） */
+.welcome .section-inner {
+  padding-bottom: 0;
+}
+
+.welcome h2 {
+  margin-bottom: 12px;
+}
+
+.welcome-lead {
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  margin-bottom: 32px;
+}
+
+.door-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.door {
+  --door: var(--forest);
+  background: var(--sand);
+  border: 1px solid var(--line);
+  border-top: 6px solid var(--door);
+  border-radius: 60px 60px 4px 4px;
+  padding: 32px 28px 28px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.door:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(36, 56, 44, 0.08);
+}
+
+.door-story {
+  --door: #2f4570;
+}
+
+.door-future {
+  --door: var(--accent);
+}
+
+.door-icon {
+  font-size: 2rem;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.door h3 {
+  text-align: center;
+  font-size: 1.25rem;
+  color: var(--door);
+  letter-spacing: 0.12em;
+  margin: 6px 0 10px;
+}
+
+.door-desc {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  line-height: 1.8;
+  margin-bottom: 18px;
+}
+
+.door-links {
+  list-style: none;
+  border-top: 1px dashed var(--line);
+  padding-top: 14px;
+}
+
+.door-links li + li {
+  margin-top: 8px;
+}
+
+.door-links a {
+  display: block;
+  font-size: 0.88rem;
+  color: var(--forest-deep);
+  padding-left: 1.1em;
+  text-indent: -1.1em;
+  transition: color 0.2s;
+}
+
+.door-links a::before {
+  content: "› ";
+  color: var(--door);
+  font-weight: 700;
+}
+
+.door-links a:hover {
+  color: var(--door);
+}
+
+/* 新着のお知らせ（小さな掲示板） */
+.news .section-inner {
+  padding-top: 56px;
+  padding-bottom: 0;
+}
+
+.news-board {
+  position: relative;
+  max-width: 760px;
+  margin: 0 auto;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 26px 30px 20px;
+  box-shadow: 0 6px 14px rgba(36, 56, 44, 0.06);
+}
+
+.news-title {
+  font-weight: 700;
+  color: var(--forest-deep);
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+}
+
+.news-list {
+  list-style: none;
+}
+
+.news-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 16px;
+  padding: 10px 0;
+  border-top: 1px dashed var(--line);
+}
+
+.news-list time {
+  flex-shrink: 0;
+  font-family: 'Georgia', serif;
+  font-size: 0.85rem;
+  color: var(--forest-mid);
+  letter-spacing: 0.05em;
+}
+
+.news-list a {
+  font-size: 0.92rem;
+  color: var(--ink);
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.news-list a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.news-list li:first-child a::after {
+  content: "NEW";
+  margin-left: 8px;
+  padding: 1px 7px;
+  font-family: 'Georgia', serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--accent);
+  border-radius: 3px;
+  vertical-align: 2px;
+}
+
+@media (max-width: 760px) {
+  .news-board {
+    padding: 22px 20px 16px;
+  }
+}
+
 /* Section shared */
 .section-inner {
   max-width: 1200px;
