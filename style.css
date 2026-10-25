@@ -647,6 +647,182 @@ h2 span {
   line-height: 1.9;
 }
 
+/* 英語でひとこと（記事のメインポイントを英文1文で。単語を押すと意味が出る） */
+.en-point {
+  margin-top: 36px;
+  padding: 24px 28px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--forest-mid);
+  border-radius: 4px;
+}
+
+.en-point-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--forest-mid);
+  letter-spacing: 0.12em;
+  margin-bottom: 6px;
+}
+
+.en-point-hint {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  margin-bottom: 14px;
+}
+
+.en-sentence {
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 2;
+  color: var(--forest-deep);
+  margin-bottom: 14px;
+  border-radius: 6px;
+}
+
+.en-sentence.speaking {
+  background: #fff3c4;
+  box-shadow: 0 0 0 8px #fff3c4;
+}
+
+.en-point .w {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0 1px;
+  border-bottom: 2px dotted var(--forest-soft);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.en-point .w:hover,
+.en-point .w:focus-visible {
+  background: #e3ece4;
+  outline: none;
+}
+
+.en-point .w.active {
+  background: #f6e1d6;
+  border-bottom-color: var(--accent);
+}
+
+.en-listen {
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--forest);
+  background: #fff;
+  border: 2px solid var(--forest-mid);
+  border-radius: 999px;
+  padding: 5px 16px;
+  cursor: pointer;
+}
+
+.en-listen:hover,
+.en-listen:focus-visible {
+  background: #e3ece4;
+  outline: none;
+}
+
+.en-listen:disabled {
+  color: #b9b2a5;
+  border-color: var(--line);
+  cursor: default;
+}
+
+.en-translation {
+  margin-top: 16px;
+  border-top: 1px dashed var(--line);
+  padding-top: 12px;
+}
+
+.en-translation summary {
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--forest);
+}
+
+.en-translation p {
+  margin-top: 8px;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.en-words-title {
+  margin-top: 16px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--forest);
+}
+
+.en-words {
+  margin-top: 6px;
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+
+.en-words dt {
+  margin-top: 8px;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.en-words dd {
+  margin-left: 1em;
+  line-height: 1.8;
+}
+
+.en-bubble {
+  position: absolute;
+  z-index: 30;
+  max-width: min(280px, calc(100vw - 32px));
+  background: var(--forest-deep);
+  color: #fff;
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.12s, transform 0.12s;
+}
+
+.en-bubble.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.en-bubble b {
+  margin-right: 8px;
+  color: #f3d9a4;
+}
+
+.en-bubble::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: var(--arrow, 50%);
+  margin-left: -7px;
+  border: 7px solid transparent;
+  border-top-color: var(--forest-deep);
+}
+
+@media (max-width: 760px) {
+  .en-point {
+    padding: 20px 18px;
+  }
+
+  .en-sentence {
+    font-size: 1.1rem;
+  }
+}
+
 /* 姉妹サイト（ヨーロッパの歴史）への案内：あちらの紺色で目印に */
 .sister {
   border-top: 1px solid var(--line);
