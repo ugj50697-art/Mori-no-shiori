@@ -164,10 +164,10 @@ a {
 }
 
 /* 英語でめぐる世界の町への入り口（ページ上部の帯）：スタンプの赤で目印に */
+/* ボタンを真ん中の列に置き、下の「森のしおり」の真上にそろえる */
 .english-banner {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 6px 18px;
   max-width: 1200px;
@@ -186,6 +186,7 @@ a {
 }
 
 .english-banner-lead {
+  justify-self: end;
   font-size: 0.85rem;
   color: #8a3a28;
   letter-spacing: 0.08em;
@@ -198,6 +199,17 @@ a {
   border-radius: 999px;
   padding: 4px 18px;
   letter-spacing: 0.05em;
+}
+
+@media (max-width: 760px) {
+  .english-banner {
+    grid-template-columns: 1fr;
+  }
+
+  .english-banner-lead,
+  .english-banner-go {
+    justify-self: center;
+  }
 }
 
 /* 初めての方へ（3つの入り口） */
