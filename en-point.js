@@ -93,9 +93,10 @@
     var all = synth.getVoices().filter(function (v) { return /^en[-_]/i.test(v.lang) && !odd.test(v.name + ' ' + v.voiceURI); });
     var us = all.filter(function (v) { return /en[-_]US/i.test(v.lang); });
     var good = function (v) { return /Google|Natural|Online|Premium|Enhanced/i.test(v.name); };
+    var tessa = function (v) { return /Tessa/i.test(v.name); }; // iPhone で聞き比べて選んだ声
     var samantha = function (v) { return /Samantha/i.test(v.name); };
     // 人らしい声が見つからないときは voice を指定せず、端末の英語の声にまかせる
-    voice = us.filter(good)[0] || all.filter(good)[0] || us.filter(samantha)[0] || us[0] || all[0] || null;
+    voice = us.filter(good)[0] || all.filter(good)[0] || all.filter(tessa)[0] || us.filter(samantha)[0] || us[0] || all[0] || null;
   }
   pickVoice();
   if (synth.addEventListener) synth.addEventListener('voiceschanged', pickVoice);
@@ -109,7 +110,7 @@
 
   function speak(btn, sentence) {
     var u = new SpeechSynthesisUtterance(sentence.textContent.replace(/\s+/g, ' ').trim());
-    u.lang = 'en-US';
+    u.lang = voice ? voice.lang : 'en-US';
     if (voice) u.voice = voice;
     u.rate = 0.85;
     u.onend = function () { if (playing && playing.u === u) reset(); };
