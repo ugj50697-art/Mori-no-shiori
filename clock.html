@@ -653,6 +653,33 @@
   let musicNodes = [];
   let musicTimer = null;
 
+  // ボタンを押したときに音を準備する（スマホで鳴らすため）
+  function prepareAudio() {
+    if (!audio) audio = new (window.AudioContext || window.webkitAudioContext)();
+    if (audio.state !== "running") audio.resume();
+    // iPhone は、押したときに一度音を出しておくと、あとから鳴らせる（無音を1つ流す）
+    const src = audio.createBufferSource();
+    src.buffer = audio.createBuffer(1, 1, audio.sampleRate);
+    src.connect(audio.destination);
+    src.start();
+  }
+
+  // タイマーの間は画面を消さない（スマホは画面が消えると時間どおりに鳴らせない）
+  let wakeLock = null;
+
+  function keepScreenOn() {
+    if (!navigator.wakeLock || wakeLock) return;
+    navigator.wakeLock.request("screen").then(function (lock) {
+      wakeLock = lock;
+      lock.addEventListener("release", function () { wakeLock = null; });
+      if (state !== "running") lock.release();
+    }).catch(function () {});
+  }
+
+  function allowScreenOff() {
+    if (wakeLock) wakeLock.release();
+  }
+
   function musicBoxNote(freq, start, dur) {
     const out = audio.createGain();
     out.gain.setValueAtTime(0, start);
@@ -748,6 +775,8 @@
       stopBtn.textContent = "♪ 音を止める";
       stopBtn.addEventListener("click", stopMusic);
       msg.appendChild(stopBtn);
+      allowScreenOff();
+      if (audio.state !== "running") audio.resume();
       playSong();
     }
     drawTimer();
@@ -794,28 +823,43 @@
   drawSongButtons();
 
   document.getElementById("timer-start").addEventListener("click", function () {
-    // 音はボタンを押したときに準備しておく（スマホで鳴らすため）
-    if (!audio) audio = new (window.AudioContext || window.webkitAudioContext)();
-    if (audio.state === "suspended") audio.resume();
+    prepareAudio();
 
     if (state === "running") {
       clearInterval(tickTimer);
       clearTimeout(doneTimer);
       remainMs = Math.max(0, endAt - Date.now());
       state = "paused";
+      allowScreenOff();
     } else {
       endAt = Date.now() + remainMs;
       state = "running";
       tickTimer = setInterval(tick, 250);
       doneTimer = setTimeout(tick, remainMs + 20);
+      keepScreenOn();
     }
     drawTimer();
+  });
+
+  // iPhone で止められた音を、画面にもどったときや触ったときに再開する
+  function resumeAudio() {
+    if (audio && audio.state !== "running") audio.resume();
+  }
+  document.addEventListener("pointerdown", resumeAudio);
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState !== "visible") return;
+    resumeAudio();
+    if (state === "running") {
+      keepScreenOn();
+      tick(); // 画面が消えていた間に時間が過ぎていれば、すぐ鳴らす
+    }
   });
 
   document.getElementById("timer-reset").addEventListener("click", function () {
     clearInterval(tickTimer);
     clearTimeout(doneTimer);
     stopMusic();
+    allowScreenOff();
     state = "idle";
     remainMs = setMinutes * 60000;
     document.getElementById("timer-msg").textContent = "";
