@@ -88,10 +88,14 @@
 
   // 英語の声をえらぶ（なめらかな声があれば、それを使う）
   function pickVoice() {
-    var all = synth.getVoices().filter(function (v) { return /^en[-_]/i.test(v.lang); });
+    // iPhone には機械のような声や遊びの声（Albert など）があり、名前順で先に来るので使わない
+    var odd = /\b(Albert|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Good News|Jester|Organ|Superstar|Trinoids|Whisper|Wobble|Zarvox|Deranged|Hysterical|Junior|Kathy|Princess|Ralph|Fred|Eddy|Flo|Grandma|Grandpa|Reed|Rocko|Sandy|Shelley)\b|eloquence|speech\.synthesis/i;
+    var all = synth.getVoices().filter(function (v) { return /^en[-_]/i.test(v.lang) && !odd.test(v.name + ' ' + v.voiceURI); });
     var us = all.filter(function (v) { return /en[-_]US/i.test(v.lang); });
-    var good = function (v) { return /Google|Natural|Online/i.test(v.name); };
-    voice = us.filter(good)[0] || all.filter(good)[0] || us[0] || all[0] || null;
+    var good = function (v) { return /Google|Natural|Online|Premium|Enhanced/i.test(v.name); };
+    var samantha = function (v) { return /Samantha/i.test(v.name); };
+    // 人らしい声が見つからないときは voice を指定せず、端末の英語の声にまかせる
+    voice = us.filter(good)[0] || all.filter(good)[0] || us.filter(samantha)[0] || us[0] || all[0] || null;
   }
   pickVoice();
   if (synth.addEventListener) synth.addEventListener('voiceschanged', pickVoice);
