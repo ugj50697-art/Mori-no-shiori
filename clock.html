@@ -325,6 +325,71 @@
     margin-bottom: 2px;
   }
 
+  /* 今月の行事と由来（カレンダーの月に合わせて変わる） */
+  .month-notes {
+    width: 100%;
+    max-width: 1500px;
+    margin-top: 40px;
+  }
+  .month-notes-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+    font-family: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
+  }
+  /* 行事ごとに1枚ずつ、イラストと文章を左右に並べる（1枚おきに左右を入れかえる） */
+  .note-cards {
+    max-width: 1040px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    text-align: left;
+  }
+  .note {
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: stretch;
+  }
+  .note:nth-child(even) { flex-direction: row-reverse; }
+  .note-img {
+    width: 44%;
+    flex-shrink: 0;
+    object-fit: cover;
+    display: block;
+  }
+  .note-body { padding: 24px 26px 26px; }
+  .note-date { font-size: 0.85rem; color: var(--sub); }
+  .note-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin: 2px 0 6px;
+  }
+  .note-hook {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--sub);
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+  .note-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--sub);
+    margin-top: 12px;
+  }
+  .note-text { font-size: 0.98rem; line-height: 1.8; }
+
+  @media (max-width: 760px) {
+    .note, .note:nth-child(even) { flex-direction: column; }
+    .note-img { width: 100%; height: auto; }
+    .note-body { padding: 18px 18px 22px; }
+  }
+
   /* スマホでは 時計 → タイマー → カレンダー の順 */
   @media (max-width: 760px) {
     .clock-side { order: -1; }
@@ -414,6 +479,11 @@
       </div>
     </section>
   </div>
+
+  <section class="month-notes" id="month-notes" aria-labelledby="month-notes-title" hidden>
+    <h2 class="month-notes-title" id="month-notes-title"></h2>
+    <div class="note-cards" id="note-cards"></div>
+  </section>
 </main>
 
 <footer>
@@ -476,6 +546,39 @@
     "1-7": "七草", "2-3": "節分", "2-14": "バレンタイン", "3-3": "ひな祭り",
     "3-14": "ホワイトデー", "7-7": "七夕", "8-13": "お盆", "10-31": "ハロウィン",
     "11-15": "七五三", "12-25": "クリスマス", "12-31": "大みそか"
+  };
+
+  // 月ごとの 行事の基本情報と由来（月の番号 → 行事の一覧）。書いてある月だけ下に表示する
+  const MONTH_NOTES = {
+    11: [
+      {
+        date: "11月3日・祝日",
+        name: "文化の日",
+        img: "images/cal-bunka-no-hi.jpg",
+        alt: "イチョウの木の下で絵を描く高校生と、本・バイオリン・白いハトの水彩風イラスト",
+        hook: "じつは、憲法と関係の深い祝日って年に2回あるって知ってた？",
+        basic: "法律に書かれた目的は「自由と平和を愛し、文化をすすめる」こと。なかなかカッコいいよね。文化の発展に大きな力をつくした人に贈られる「文化勲章」の授与式も、この日に皇居で開かれるよ。",
+        origin: "1946年11月3日は、日本国憲法が発表（公布）された日。そして半年後、実際にスタートした1947年5月3日が「憲法記念日」。つまり、発表の日とスタートの日がどちらも祝日なんだ。平和と文化を大切にする憲法にちなんで、1948年に「文化の日」という祝日になったよ。さらにさかのぼると、11月3日は明治天皇の誕生日で、戦前は「明治節」という祝日だった。"
+      },
+      {
+        date: "11月15日ごろ・祝日ではないよ",
+        name: "七五三",
+        img: "images/cal-shichigosan.jpg",
+        alt: "紅葉の神社で千歳飴の袋を持つ、晴れ着の子ども3人の水彩風イラスト",
+        hook: "千歳飴って、なんであんなに細長いんだろう？",
+        basic: "子どもの成長を祝って、神社などにお参りする行事。ふつうは3歳と5歳の男の子、3歳と7歳の女の子がお祝いするよ（地域や家によってちがいます）。千歳飴の「千歳」は千年のこと。細く長い形には、長生きしてほしいという願いがこめられているといわれているよ。",
+        origin: "もとは昔の公家や武家の儀式。髪をのばしはじめる「髪置き」（3歳）、はじめて袴をつける「袴着」（5歳）、帯をしめるようになる「帯解き」（7歳）の3つだよ。子どもが無事に育つのが今よりずっと難しかった時代、節目を迎えられること自体が大きな喜びだった。なぜ11月15日なのかは、いくつかの説があって、はっきりしていないんだ。"
+      },
+      {
+        date: "11月23日・祝日",
+        name: "勤労感謝の日",
+        img: "images/cal-kinro-kansha.jpg",
+        alt: "実りの田んぼで稲を持つ農家と、笑顔で感謝し合う看護師・建設作業員・料理人・配達員の水彩風イラスト",
+        hook: "「働く人ありがとうの日」のルーツは、なんとお米！",
+        basic: "法律に書かれた目的は「勤労をたつとび、生産を祝い、国民たがいに感謝しあう」こと。注目は「たがいに」のところ。誰かが誰かに感謝するだけじゃなくて、みんなでおたがいに「ありがとう」を言い合う日なんだ。",
+        origin: "もとは「新嘗祭（にいなめさい）」という宮中の行事の日。その年にとれた新しいお米などを神にささげて、実りに感謝するお祭りだよ。戦前は国の祭日だったけれど、戦後の1948年に、今の名前の祝日になった。「新穀感謝の日」などの案もあった中で、戦後の立て直しは国民の働きと生産にかかっているという考えから、「勤労」の名前になったとされているよ。新嘗祭は、今も11月23日に宮中で行われているよ。"
+      }
+    ]
   };
 
   function nthWeekday(y, m, weekday, n) {
@@ -569,6 +672,49 @@
     document.getElementById("season-event").textContent = s[0];
     document.getElementById("season-food").textContent = s[1];
     document.getElementById("season-flower").textContent = s[2];
+
+    renderMonthNotes();
+  }
+
+  function renderMonthNotes() {
+    const notes = MONTH_NOTES[viewMonth + 1];
+    const cards = document.getElementById("note-cards");
+    cards.innerHTML = "";
+    document.getElementById("month-notes").hidden = !notes;
+    if (!notes) return;
+
+    document.getElementById("month-notes-title").textContent = (viewMonth + 1) + "月の行事と由来";
+    notes.forEach(function (n) {
+      const card = document.createElement("article");
+      card.className = "panel note";
+      const img = document.createElement("img");
+      img.className = "note-img";
+      img.src = n.img;
+      img.alt = n.alt;
+      img.loading = "lazy";
+      card.appendChild(img);
+
+      const body = document.createElement("div");
+      body.className = "note-body";
+      [["note-date", n.date], ["note-name", n.name], ["note-hook", n.hook]].forEach(function (part) {
+        const p = document.createElement("p");
+        p.className = part[0];
+        p.textContent = part[1];
+        body.appendChild(p);
+      });
+      [["どんな日？", n.basic], ["はじまりは？", n.origin]].forEach(function (part) {
+        const label = document.createElement("span");
+        label.className = "note-label";
+        label.textContent = part[0];
+        const p = document.createElement("p");
+        p.className = "note-text";
+        p.textContent = part[1];
+        body.appendChild(label);
+        body.appendChild(p);
+      });
+      card.appendChild(body);
+      cards.appendChild(card);
+    });
   }
 
   function moveMonth(n) {
