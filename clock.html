@@ -325,6 +325,69 @@
     margin-bottom: 2px;
   }
 
+  /* 今日の天気（気象庁の予報。松戸市・江戸川区の2か所 × 今日・明日・あさって） */
+  .weather {
+    width: 100%;
+    max-width: 1040px;
+    margin-top: 40px;
+    text-align: left;
+  }
+  .weather-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 4px 12px;
+    margin-bottom: 12px;
+  }
+  .weather-src { font-size: 0.8rem; color: var(--sub); }
+  .wx-place {
+    display: grid;
+    grid-template-columns: 9em repeat(3, 1fr);
+    gap: 10px;
+    align-items: stretch;
+    padding: 12px 0;
+    border-top: 1px dashed var(--line);
+  }
+  .wx-name { align-self: center; font-size: 1.15rem; font-weight: 700; }
+  .wx-name span { display: block; font-size: 0.75rem; font-weight: 500; color: var(--sub); }
+  .wx-day {
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--frame) 12%, transparent);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-areas: "label label" "icon text" "icon temp";
+    column-gap: 10px;
+    align-items: center;
+  }
+  .wx-label { grid-area: label; font-size: 0.85rem; font-weight: 700; color: var(--sub); }
+  .wx-icon  { grid-area: icon; font-size: 2.2rem; line-height: 1; }
+  .wx-text  { grid-area: text; font-size: 0.85rem; line-height: 1.4; }
+  .wx-temp  { grid-area: temp; font-size: 0.95rem; font-variant-numeric: tabular-nums; }
+  .wx-temp .hi { color: var(--sun); font-weight: 700; }
+  .wx-temp .lo { color: var(--sat); font-weight: 700; }
+  .wx-temp small { color: var(--sub); margin-left: 6px; }
+  .weather-msg { font-size: 0.95rem; color: var(--sub); padding: 8px 0; }
+  .weather-note { font-size: 0.75rem; color: var(--sub); margin-top: 6px; }
+
+  @media (max-width: 760px) {
+    .wx-place { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .wx-name { grid-column: 1 / -1; }
+    .wx-name span { display: inline; margin-left: 6px; }
+    .wx-day {
+      padding: 8px 6px;
+      grid-template-columns: 1fr;
+      grid-template-areas: "label" "icon" "text" "temp";
+      text-align: center;
+      row-gap: 4px;
+    }
+    .wx-icon { font-size: 1.9rem; }
+    .wx-text { font-size: 0.75rem; }
+    .wx-temp { font-size: 0.85rem; }
+    .wx-temp small { display: block; margin-left: 0; }
+  }
+
   /* 今月の行事と由来（カレンダーの月に合わせて変わる） */
   .month-notes {
     width: 100%;
@@ -479,6 +542,15 @@
       </div>
     </section>
   </div>
+
+  <section class="panel weather" aria-labelledby="weather-title">
+    <div class="weather-head">
+      <p class="panel-title" id="weather-title">🌦️ 今日の天気</p>
+      <p class="weather-src" id="weather-src">気象庁の予報を読み込み中…</p>
+    </div>
+    <div id="weather-body"></div>
+    <p class="weather-note">松戸市は「千葉県北西部」と千葉市の気温、江戸川区は「東京地方」と東京の気温の予報です。赤が最高気温、青が最低気温、☂は雨や雪の降る確率です。夕方以降は今日の最高気温が出なくなります。また、千葉県は「あさって」の千葉市の気温が発表されないため「―」になります。</p>
+  </section>
 
   <section class="month-notes" id="month-notes" aria-labelledby="month-notes-title" hidden>
     <h2 class="month-notes-title" id="month-notes-title"></h2>
@@ -1013,6 +1085,175 @@
   });
 
   drawTimer();
+
+  // ---- 今日の天気（気象庁 https://www.jma.go.jp/bosai/forecast/ のデータ） ----
+
+  const WX_PLACES = [
+    { name: "松戸市",   region: "千葉県北西部", office: "120000", area: "120010", week: "120000", temp: "45212" },
+    { name: "江戸川区", region: "東京地方",     office: "130000", area: "130010", week: "130010", temp: "44132" }
+  ];
+
+  // 天気コードの1けた目で絵を決める（1 晴れ・2 くもり・3 雨・4 雪）
+  function wxIcon(code) {
+    return { "1": "☀️", "2": "☁️", "3": "☔", "4": "⛄" }[String(code).charAt(0)] || "🌈";
+  }
+  // 週間予報にしかない日のための、ざっくりした言葉
+  function wxWord(code) {
+    const c = String(code);
+    const base = { "1": "晴れ", "2": "くもり", "3": "雨", "4": "雪" }[c.charAt(0)] || "";
+    if (c === "100" || c === "200" || c === "300" || c === "400") return base;
+    return base + "が中心";
+  }
+
+  const ymd = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  const dayOf = s => s.slice(0, 10);   // "2026-11-10T09:00:00+09:00" → "2026-11-10"
+  const hourOf = s => Number(s.slice(11, 13));
+
+  function findArea(series, code) {
+    return series.areas.find(a => a.area.code === code);
+  }
+
+  // 1か所ぶんの 今日・明日・あさって をまとめる
+  function wxDays(place, data) {
+    const short = data[0].timeSeries, week = data[1].timeSeries;
+    const now = new Date();
+    const dates = [0, 1, 2].map(n => ymd(new Date(now.getFullYear(), now.getMonth(), now.getDate() + n)));
+
+    const sky = findArea(short[0], place.area);
+    const pops = findArea(short[1], place.area);
+    const temps = findArea(short[2], place.temp);
+    const wSky = findArea(week[0], place.week);
+    const wTemp = findArea(week[1], place.temp);
+
+    return dates.map(function (date, n) {
+      const day = { label: ["今日", "明日", "あさって"][n], code: "", text: "", hi: "", lo: "", pop: "" };
+
+      // 天気：3日ぶんの予報 → なければ週間予報
+      const i = short[0].timeDefines.findIndex(t => dayOf(t) === date);
+      if (sky && i >= 0) {
+        day.code = sky.weatherCodes[i];
+        day.text = sky.weathers[i].replace(/\s+/g, "");
+      } else if (wSky) {
+        const k = week[0].timeDefines.findIndex(t => dayOf(t) === date);
+        if (k >= 0 && wSky.weatherCodes[k]) { day.code = wSky.weatherCodes[k]; day.text = wxWord(day.code); }
+      }
+
+      // 降水確率：6時間ごとの予報のうち、その日でいちばん高い値 → なければ週間予報
+      if (pops) {
+        const vals = short[1].timeDefines
+          .map((t, j) => dayOf(t) === date ? pops.pops[j] : "")
+          .filter(v => v !== "" && v !== undefined).map(Number);
+        if (vals.length) day.pop = Math.max.apply(null, vals);
+      }
+      if (day.pop === "" && wSky) {
+        const k = week[0].timeDefines.findIndex(t => dayOf(t) === date);
+        if (k >= 0 && wSky.pops[k] !== "") day.pop = Number(wSky.pops[k]);
+      }
+
+      // 気温：0時の値＝朝の最低、9時の値＝日中の最高。今日の朝の最低は、発表のしかたで当てにならないので出さない
+      if (temps) {
+        short[2].timeDefines.forEach(function (t, j) {
+          if (dayOf(t) !== date) return;
+          if (hourOf(t) === 9) day.hi = temps.temps[j];
+          else if (hourOf(t) === 0 && n > 0) day.lo = temps.temps[j];
+        });
+      }
+      if (wTemp && n > 0) {
+        const k = week[1].timeDefines.findIndex(t => dayOf(t) === date);
+        if (k >= 0) {
+          if (day.hi === "") day.hi = wTemp.tempsMax[k] || "";
+          if (day.lo === "") day.lo = wTemp.tempsMin[k] || "";
+        }
+      }
+      return day;
+    });
+  }
+
+  function renderWeather(results) {
+    const body = document.getElementById("weather-body");
+    body.innerHTML = "";
+    results.forEach(function (r) {
+      const row = document.createElement("div");
+      row.className = "wx-place";
+      const name = document.createElement("p");
+      name.className = "wx-name";
+      name.textContent = r.place.name;
+      const region = document.createElement("span");
+      region.textContent = r.place.region;
+      name.appendChild(region);
+      row.appendChild(name);
+
+      if (!r.days) {
+        const msg = document.createElement("p");
+        msg.className = "weather-msg";
+        msg.style.gridColumn = "2 / -1";
+        msg.textContent = "読み込めませんでした。";
+        row.appendChild(msg);
+        body.appendChild(row);
+        return;
+      }
+
+      r.days.forEach(function (d) {
+        const cell = document.createElement("div");
+        cell.className = "wx-day";
+        const parts = [
+          ["wx-label", d.label],
+          ["wx-icon", d.code ? wxIcon(d.code) : "―"],
+          ["wx-text", d.text || "予報はまだありません"]
+        ];
+        parts.forEach(function (p) {
+          const el = document.createElement("span");
+          el.className = p[0];
+          el.textContent = p[1];
+          cell.appendChild(el);
+        });
+        const temp = document.createElement("span");
+        temp.className = "wx-temp";
+        temp.innerHTML =
+          '<span class="hi">' + (d.hi !== "" ? d.hi + "℃" : "―") + '</span> / ' +
+          '<span class="lo">' + (d.lo !== "" ? d.lo + "℃" : "―") + '</span>' +
+          '<small>☂ ' + (d.pop !== "" ? d.pop + "%" : "―") + '</small>';
+        temp.setAttribute("aria-label",
+          "最高 " + (d.hi || "なし") + "度、最低 " + (d.lo || "なし") + "度、降水確率 " + (d.pop !== "" ? d.pop + "パーセント" : "なし"));
+        cell.appendChild(temp);
+        row.appendChild(cell);
+      });
+      body.appendChild(row);
+    });
+  }
+
+  function loadWeather() {
+    const offices = Array.from(new Set(WX_PLACES.map(p => p.office)));
+    Promise.all(offices.map(function (code) {
+      return fetch("https://www.jma.go.jp/bosai/forecast/data/forecast/" + code + ".json", { cache: "no-store" })
+        .then(r => r.ok ? r.json() : null)
+        .catch(() => null);
+    })).then(function (list) {
+      const byOffice = {};
+      offices.forEach((code, i) => { byOffice[code] = list[i]; });
+
+      const results = WX_PLACES.map(function (place) {
+        const data = byOffice[place.office];
+        let days = null;
+        try { if (data) days = wxDays(place, data); } catch (e) { days = null; }
+        return { place: place, days: days };
+      });
+      renderWeather(results);
+
+      const any = list.find(Boolean);
+      const src = document.getElementById("weather-src");
+      if (any) {
+        const t = new Date(any[0].reportDatetime);
+        src.textContent = "気象庁　" + (t.getMonth() + 1) + "月" + t.getDate() + "日 " + t.getHours() + "時の発表";
+      } else {
+        src.textContent = "天気を読み込めませんでした。ネットにつながっているか確かめてください。";
+      }
+    });
+  }
+
+  loadWeather();
+  // 気象庁の発表（5時・11時・17時）に合わせて、30分ごとに読みなおす
+  setInterval(loadWeather, 30 * 60000);
 
   // ---- 時計 ----
 
